@@ -1,33 +1,16 @@
 'use strict'
 const getIntFromRange = (min, max) => {
-  min = Math.floor(min);
-  max = Math.floor(max);
-  if (min < 0 || max < 0) {
-    return 'Диапазон может быть только положительный, включая ноль';
-  }
-  if (min > max) {
-    let temp = min;
-    min = max;
-    max = temp;
-  }
-  if (max === min) {
-    return max;
-  }
-  return Math.floor(Math.random() * (max - min + 1) + min);
+  return (min < 0 || max < 0) ? 'Диапазон может быть только положительный, включая ноль' : Math.floor(getFloatFromRange(min, max));
 }
 
 const getFloatFromRange = (min, max, decimal) => {
   if (min < 0 || max < 0) {
     return 'Диапазон может быть только положительный, включая ноль';
   }
-  if (min > max) {
-    let temp = min;
-    min = max;
-    max = temp;
-  }
   if (max === min) {
     return max;
   }
-  return (Math.random() * (max - min) + min).toFixed(decimal);
+  return (Math.random() * (Math.abs(max - min)) + min).toFixed(decimal);
 }
-
+getFloatFromRange(3.1,7.3);
+getIntFromRange(7,9);
