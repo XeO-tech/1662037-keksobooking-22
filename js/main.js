@@ -8,7 +8,7 @@ const getFloatFromRange = (min, max, decimal) => {
   if (max === min) {
     return max;
   }
-  return (Math.random() * (Math.abs(max - min)) + min).toFixed(decimal);
+  return (Math.random() * (Math.abs(max - min)) + Math.min(max, min)).toFixed(decimal);
 }
 getFloatFromRange(3.1, 7.3, 2);
-getIntFromRange(7, 9);
+getIntFromRange(9, 7);
