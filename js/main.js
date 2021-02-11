@@ -1,4 +1,8 @@
 'use strict'
+const OFFER_TYPES = ['palace', 'flat', 'house', 'bungalow'];
+const CHECK_TIME = ['12:00', '13:00', '14:00'];
+const FEATURES_LIST = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+
 const getIntFromRange = (min, max) => getFloatFromRange(min, max);
 
 const getFloatFromRange = (min, max, decimal) => {
@@ -8,7 +12,52 @@ const getFloatFromRange = (min, max, decimal) => {
   if (max === min) {
     return max;
   }
-  return (Math.random() * (Math.abs(max - min)) + Math.min(max, min)).toFixed(decimal);
+  return Number((Math.random() * (Math.abs(max - min)) + Math.min(max, min)).toFixed(decimal));
 }
-getFloatFromRange(3.1, 7.3, 2);
-getIntFromRange(9, 7);
+
+const createFeaturesList = () => {
+  let resultArr = [];
+  let tempArr = [...FEATURES_LIST];
+  const randomLength = getIntFromRange(0, FEATURES_LIST.length);
+  for (let i = 0; i < randomLength; i++) {
+    const randomElement = getIntFromRange(0, tempArr.length-1);
+    resultArr.push(tempArr[randomElement]);
+    tempArr.splice(randomElement,1);
+  }
+  return resultArr;
+};
+
+const createPhotosLinks = () => new Array(getIntFromRange(0,10)).fill('http://o0.github.io/assets/images/tokyo/hotel').map((value, ind) => value += `${ind + 1}.jpg`);
+
+const createObject = () => {
+  const ROOMS_NUMBER = getIntFromRange(2,4);
+  const COORDINATE_X = getFloatFromRange(35.65000, 35.70000, 5);
+  const COORDINATE_Y = getFloatFromRange(139.70000, 139.80000, 5);
+  return {
+    author: {
+      avatar: `img/avatars/user0${getIntFromRange(1,8)}.png`,
+    },
+    offer: {
+      title: `Сдается ${ROOMS_NUMBER}-x комнатное жилье`,
+      address: `${COORDINATE_X}, ${COORDINATE_Y}`,
+      price: getIntFromRange(20000, 50000),
+      type: OFFER_TYPES[getIntFromRange(0,3)],
+      rooms: ROOMS_NUMBER,
+      guests: getIntFromRange(1,6),
+      checkin: CHECK_TIME[getIntFromRange(0,2)],
+      checkout: CHECK_TIME[getIntFromRange(0,2)],
+      features: createFeaturesList(),
+      description: `Сдается отличное ${ROOMS_NUMBER}-x комнатное жилье c видом на Кремль.`,
+      photos: createPhotosLinks(),
+    },
+    location: {
+      x: COORDINATE_X,
+      y: COORDINATE_Y,
+    },
+  };
+};
+
+const createObjectsArr = () => new Array(10).fill(null).map(() => createObject());
+
+createObjectsArr();
+console.log(createObjectsArr())
