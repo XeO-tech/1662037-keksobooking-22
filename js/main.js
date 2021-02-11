@@ -60,4 +60,3 @@ const createObject = () => {
 const createObjectsArr = () => new Array(10).fill(null).map(() => createObject());
 
 createObjectsArr();
-console.log(createObjectsArr())
