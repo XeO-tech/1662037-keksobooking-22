@@ -30,29 +30,29 @@ const createFeaturesList = () => {
 const createPhotosLinks = () => new Array(getIntFromRange(0,10)).fill('http://o0.github.io/assets/images/tokyo/hotel').map((value, ind) => value += `${ind + 1}.jpg`);
 
 const createObject = () => {
-  const ROOMS_NUMBER = getIntFromRange(2,4);
-  const COORDINATE_X = getFloatFromRange(35.65000, 35.70000, 5);
-  const COORDINATE_Y = getFloatFromRange(139.70000, 139.80000, 5);
+  const roomsNumber = getIntFromRange(2,4);
+  const coordinateX = getFloatFromRange(35.65000, 35.70000, 5);
+  const coordinateY = getFloatFromRange(139.70000, 139.80000, 5);
   return {
     author: {
       avatar: `img/avatars/user0${getIntFromRange(1,8)}.png`,
     },
     offer: {
-      title: `Сдается ${ROOMS_NUMBER}-x комнатное жилье`,
-      address: `${COORDINATE_X}, ${COORDINATE_Y}`,
+      title: `Сдается ${roomsNumber}-x комнатное жилье`,
+      address: `${coordinateX}, ${coordinateY}`,
       price: getIntFromRange(20000, 50000),
       type: OFFER_TYPES[getIntFromRange(0,3)],
-      rooms: ROOMS_NUMBER,
+      rooms: roomsNumber,
       guests: getIntFromRange(1,6),
       checkin: CHECK_TIME[getIntFromRange(0,2)],
       checkout: CHECK_TIME[getIntFromRange(0,2)],
       features: createFeaturesList(),
-      description: `Сдается отличное ${ROOMS_NUMBER}-x комнатное жилье c видом на Кремль.`,
+      description: `Сдается отличное ${roomsNumber}-x комнатное жилье c видом на Кремль.`,
       photos: createPhotosLinks(),
     },
     location: {
-      x: COORDINATE_X,
-      y: COORDINATE_Y,
+      x: coordinateX,
+      y: coordinateY,
     },
   };
 };
