@@ -37,7 +37,7 @@ const fillCard = (data) => {
   // Showing simple text data
   for (let key in textDataAlias) {
     if (textDataAlias[key] !== '') {
-    card.querySelector('.' + key).innerText = textDataAlias[key];
+      card.querySelector('.' + key).innerText = textDataAlias[key];
     } else {
       card.querySelector('.' + key).style.display = 'none';
     }
