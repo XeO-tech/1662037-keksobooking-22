@@ -1,4 +1,3 @@
-import {createObjectsArr} from './data.js';
+import './elements-generator.js';
 
-createObjectsArr(10);
 
