@@ -1,5 +1,3 @@
-import {createObjectsArr} from './data.js';
-
 const cardTemplate = document.querySelector('#card').content;
 const cardTemplateItem = cardTemplate.querySelector('.popup');
 
@@ -44,23 +42,27 @@ const fillCard = (data) => {
   }
 
   // Displaying photos
+  const photosFragment = document.createDocumentFragment()
   for (let i = 0; i < data.offer.photos.length; i++) {
     const newPhoto = photo.cloneNode(true);
     newPhoto.src = data.offer.photos[i];
-    photos.appendChild(newPhoto);
+    photosFragment.appendChild(newPhoto);
   }
   photos.removeChild(photo);
+  photos.appendChild(photosFragment);
   if (photos.children.length === 0) {
     photos.style.display = 'none';
   }
 
   // Displaying features icons
   featuresList.innerHTML = '';
+  const featuresFragment = document.createDocumentFragment()
   for (let element of data.offer.features) {
     const newFeature = document.createElement('li');
     newFeature.className = `popup__feature popup__feature--${element}`;
-    featuresList.appendChild(newFeature);
+    featuresFragment.appendChild(newFeature);
   }
+  featuresList.appendChild(featuresFragment);
   if (featuresList.children.length === 0) {
     featuresList.style.display = 'none';
   }
@@ -70,6 +72,10 @@ const fillCard = (data) => {
 
   return card;
 };
+const render = (data) => {
+  const testMapElement = fillCard(data[0]);
+  document.querySelector('#map-canvas').appendChild(testMapElement);
+}
 
-const testMapElement = fillCard(createObjectsArr(1)[0]);
-document.querySelector('#map-canvas').appendChild(testMapElement);
+export {render};
+
