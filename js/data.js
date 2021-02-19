@@ -16,7 +16,7 @@ const createFeaturesList = () => {
   return resultArr;
 };
 
-const createPhotosLinks = () => new Array(getIntFromRange(0,10)).fill('http://o0.github.io/assets/images/tokyo/hotel').map((value, ind) => value += `${ind + 1}.jpg`);
+const createPhotosLinks = () => new Array(getIntFromRange(0,3)).fill('http://o0.github.io/assets/images/tokyo/hotel').map((value, ind) => value += `${ind + 1}.jpg`);
 
 const createObject = () => {
   const roomsNumber = getIntFromRange(2,4);
