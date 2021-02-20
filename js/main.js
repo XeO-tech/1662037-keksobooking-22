@@ -3,6 +3,7 @@
 import {createObjectsArr} from './data.js';
 import {map, mainMarker} from './map.js';
 import {fillCard} from './elements-generator.js';
+import './form-handler.js';
 
 const adsList = createObjectsArr(10);
 
