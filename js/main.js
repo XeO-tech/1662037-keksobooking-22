@@ -3,7 +3,7 @@
 import {createObjectsArr} from './data.js';
 import {map, mainMarker} from './map.js';
 import {fillCard} from './elements-generator.js';
-import './form-handler.js';
+import {handleForm} from './form-handler.js';
 import './form-validation.js';
 
 
@@ -70,6 +70,8 @@ changeFormStatus('disabled');
 map.on('load', changeFormStatus('enabled'));
 
 getAddressByMarkerOnly();
+
+handleForm();
 
 showAdsOnMap(adsList);
 
