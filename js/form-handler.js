@@ -11,7 +11,7 @@ const handleForm = () => {
 
   [checkIn, checkOut].forEach((element) => element.addEventListener('change', onCheckInOut));
 
-  placeType.addEventListener('change', () => {
+  const setPlaceMinPrice = () => {
     let minPrice = 0;
     switch (placeType.value) {
       case 'bungalow':
@@ -28,6 +28,10 @@ const handleForm = () => {
         break;
     }
     nightPrice.min = nightPrice.placeholder = minPrice;
-  });
+  };
+
+  setPlaceMinPrice();
+
+  placeType.addEventListener('change', setPlaceMinPrice);
 }
 export {handleForm}

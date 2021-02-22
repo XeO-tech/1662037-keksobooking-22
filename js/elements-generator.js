@@ -72,4 +72,10 @@ const fillCard = (data) => {
   return card;
 };
 
-export {fillCard};
+const render = (data) => {
+  const testMapElement = fillCard(data[0]);
+  document.querySelector('#map-canvas').appendChild(testMapElement);
+}
+
+export {render};
+
