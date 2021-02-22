@@ -15,16 +15,16 @@ const handleForm = () => {
     let minPrice = 0;
     switch (placeType.value) {
       case 'bungalow':
-        minPrice = 80000;
+        minPrice = 0;
         break;
       case 'flat':
-        minPrice = 5000;
+        minPrice = 1000;
         break;
       case 'house':
-        minPrice = 15000;
+        minPrice = 5000;
         break;
       case 'palace':
-        minPrice = 120000;
+        minPrice = 10000;
         break;
     }
     nightPrice.min = nightPrice.placeholder = minPrice;
