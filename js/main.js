@@ -35,7 +35,7 @@ const changeFormStatus = (status) => {
 
 
 
-//changeFormStatus('disabled');
+changeFormStatus('disabled');
 
 renderMap();
 
