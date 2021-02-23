@@ -1,7 +1,6 @@
-const cardTemplate = document.querySelector('#card').content;
-const cardTemplateItem = cardTemplate.querySelector('.popup');
-
 const fillCard = (data) => {
+  const cardTemplate = document.querySelector('#card').content;
+  const cardTemplateItem = cardTemplate.querySelector('.popup');
   const card = cardTemplateItem.cloneNode(true);
   const photos = card.querySelector('.popup__photos');
   const photo = photos.querySelector('.popup__photo');
@@ -72,6 +71,7 @@ const fillCard = (data) => {
 
   return card;
 };
+
 const render = (data) => {
   const testMapElement = fillCard(data[0]);
   document.querySelector('#map-canvas').appendChild(testMapElement);
