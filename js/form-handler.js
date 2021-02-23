@@ -30,9 +30,11 @@ const handleForm = () => {
     nightPrice.min = nightPrice.placeholder = minPrice;
   };
 
+  const onPlaceTypeChanged = () => setPlaceMinPrice();
+
   setPlaceMinPrice();
 
-  placeType.addEventListener('change', setPlaceMinPrice);
+  placeType.addEventListener('change', onPlaceTypeChanged);
 }
 
 const changeFormStatus = (status) => {

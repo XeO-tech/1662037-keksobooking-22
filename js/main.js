@@ -4,15 +4,17 @@ import {handleForm, changeFormStatus} from './form-handler.js';
 
 const adsList = createObjectsArr(10);
 
+const onMapLoaded = () => changeFormStatus('enabled');
+
+
 changeFormStatus('disabled');
 
 renderMap();
 
-map.on('load', changeFormStatus('enabled'));
+map.on('load', onMapLoaded());
+
+handleForm();
 
 showAdsOnMap(adsList);
 
 getAddressByMarkerOnly();
-
-handleForm();
-

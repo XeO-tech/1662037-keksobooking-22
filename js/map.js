@@ -53,14 +53,13 @@ const showAdsOnMap = (adsArray) => {
     iconAnchor: [16, 32],
   });
   adsArray.forEach((element) => {
-    const marker = L.marker({
+    L.marker({
       lat: element.location.x,
       lng: element.location.y,
     },
     {
       icon: adsIcon,
-    });
-    marker
+    })
       .addTo(map)
       .bindPopup(fillCard(element));
   });
