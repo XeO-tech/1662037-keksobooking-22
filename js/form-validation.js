@@ -10,10 +10,6 @@ const validateForm = () => {
   const MAX_TITLE_LENGTH = 100;
   const MAX_PRICE = 1000000;
 
-  adTitle.minLength = MIN_TITLE_LENGTH;
-  adTitle.maxLength = MAX_TITLE_LENGTH;
-  nightPrice.max = MAX_PRICE;
-
   const onRoomNumberChange = () => {
     for (let element of guests.children) {
       element.disabled = true;
@@ -38,8 +34,26 @@ const validateForm = () => {
     }
   };
 
-  document.addEventListener('DOMContentLoaded', onRoomNumberChange)
+  adTitle.addEventListener('input', () => {
+
+    const valueLength = adTitle.value.length;
+
+    if (valueLength < MIN_TITLE_LENGTH) {
+      adTitle.setCustomValidity('Ещё ' + (MIN_TITLE_LENGTH - valueLength) +' символов.');
+    } else if (valueLength > MAX_TITLE_LENGTH) {
+      adTitle.setCustomValidity('Удалите лишние ' + (valueLength - MAX_TITLE_LENGTH) +' символов.');
+    } else {
+      adTitle.setCustomValidity('');
+    }
+
+    adTitle.reportValidity();
+  });
+
+  document.addEventListener('DOMContentLoaded', onRoomNumberChange);
+
   roomNumber.addEventListener('change', onRoomNumberChange);
+
+  nightPrice.max = MAX_PRICE;
 }
 
 export {validateForm}
