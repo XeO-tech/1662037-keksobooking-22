@@ -2,11 +2,28 @@
 
 import {fillCard} from './elements-generator.js';
 import {changeFormStatus} from './form-handler.js';
-import {getData} from './api.js';
-import {showAlert} from './util.js';
+import {getMapData} from './api.js';
 
+const pinIcon = L.icon({
+  iconUrl: './img/main-pin.svg',
+  iconSize: [36, 36],
+  iconAnchor: [18, 36],
+});
+
+const mainMarker = L.marker(
+  {
+    lat:35.6825,
+    lng:139.7512,
+  },
+  {
+    draggable: true,
+    icon: pinIcon,
+  },
+);
 
 const handleMap = () => {
+
+  const ALERT_SHOW_TIME = 5000;
 
   const onMapLoaded = () => changeFormStatus('enabled');
 
@@ -23,24 +40,9 @@ const handleMap = () => {
     },
   ).addTo(map);
 
-  const pinIcon = L.icon({
-    iconUrl: './img/main-pin.svg',
-    iconSize: [36, 36],
-    iconAnchor: [18, 36],
-  });
+  mainMarker.addTo(map);
 
-  const mainMarker = L.marker(
-    {
-      lat:35.6825,
-      lng:139.7512,
-    },
-    {
-      draggable: true,
-      icon: pinIcon,
-    },
-  ).addTo(map);
-
-  const getAddressByMarkerOnly = () => {
+  const setupAddressByMarkerOnly = () => {
     const addressField = document.querySelector('#address');
     const mainMarkerCoordinates = mainMarker.getLatLng();
 
@@ -72,11 +74,32 @@ const handleMap = () => {
     });
   };
 
-  getAddressByMarkerOnly();
+  const showMapAlert = (message) => {
+    const alertContainer = document.createElement('div');
+    alertContainer.style.zIndex = 1000;
+    alertContainer.style.position = 'absolute';
+    alertContainer.style.left = 0;
+    alertContainer.style.right = 0;
+    alertContainer.style.top = 0;
+    alertContainer.style.padding = '2px';
+    alertContainer.style.fontSize = '15px';
+    alertContainer.style.textAlign = 'center';
+    alertContainer.style.backgroundColor = 'red';
+    alertContainer.style.opacity = 0.8;
+
+    alertContainer.textContent = message;
+    document.querySelector('#map-canvas').append(alertContainer);
+
+    setTimeout(() => {
+      alertContainer.remove();
+    }, ALERT_SHOW_TIME);
+  };
+
+  setupAddressByMarkerOnly();
 
   map.on('load', onMapLoaded());
 
-  getData(showAdsOnMap, showAlert('Не удалось загрузить объявления с сервера'));
+  getMapData(showAdsOnMap, () => showMapAlert('Не удалось загрузить объявления с сервера'));
 }
 
-export {handleMap};
+export {handleMap, mainMarker};
