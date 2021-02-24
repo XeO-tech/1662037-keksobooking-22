@@ -4,7 +4,7 @@ import {validateForm} from './form-validation.js'
 
 changeFormStatus('disabled');
 
-handleMap()
+handleMap();
 
 handleForm();
 

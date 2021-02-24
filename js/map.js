@@ -3,6 +3,8 @@
 import {fillCard} from './elements-generator.js';
 import {changeFormStatus} from './form-handler.js';
 import {getData} from './api.js';
+import {showAlert} from './util.js';
+
 
 const handleMap = () => {
 
@@ -12,7 +14,7 @@ const handleMap = () => {
     .setView({
       lat: 35.6825,
       lng: 139.7593,
-    }, 12);
+    }, 9);
 
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -59,8 +61,8 @@ const handleMap = () => {
     });
     adsArray.forEach((element) => {
       L.marker({
-        lat: element.location.x,
-        lng: element.location.y,
+        lat: element.location.lat,
+        lng: element.location.lng,
       },
       {
         icon: adsIcon,
@@ -74,7 +76,7 @@ const handleMap = () => {
 
   map.on('load', onMapLoaded());
 
-  showAdsOnMap(getData);
+  getData(showAdsOnMap, showAlert('Не удалось загрузить объявления с сервера'));
 }
 
 export {handleMap};
