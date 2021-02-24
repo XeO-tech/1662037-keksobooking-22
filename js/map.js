@@ -39,10 +39,14 @@ const handleMap = (adsArray) => {
 
   const getAddressByMarkerOnly = () => {
     const addressField = document.querySelector('#address');
+    const mainMarkerCoordinates = mainMarker.getLatLng();
+
     addressField.readOnly = true;
+    addressField.value = `${mainMarkerCoordinates.lat.toFixed(5)}, ${mainMarkerCoordinates.lng.toFixed(5)}`;
+
     mainMarker.on('moveend', (evt) => {
-      const coordinates = evt.target.getLatLng();
-      addressField.value = `${coordinates.lat.toFixed(5)}, ${coordinates.lng.toFixed(5)}`
+      const newCoordinates = evt.target.getLatLng();
+      addressField.value = `${newCoordinates.lat.toFixed(5)}, ${newCoordinates.lng.toFixed(5)}`
     });
   }
 
