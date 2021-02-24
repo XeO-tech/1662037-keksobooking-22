@@ -1,6 +1,8 @@
 import {createObjectsArr} from './data.js';
 import {handleMap} from './map.js';
-import {handleForm} from './form-handler.js';
+import {handleForm, changeFormStatus} from './form-handler.js';
+
+changeFormStatus('disabled');
 
 handleMap(createObjectsArr(10));
 

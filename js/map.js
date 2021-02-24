@@ -5,8 +5,6 @@ import {changeFormStatus} from './form-handler.js';
 
 const handleMap = (adsArray) => {
 
-  changeFormStatus('disabled');
-
   const onMapLoaded = () => changeFormStatus('enabled');
 
   const map = L.map('map-canvas')
@@ -19,6 +17,23 @@ const handleMap = (adsArray) => {
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+  ).addTo(map);
+
+  const pinIcon = L.icon({
+    iconUrl: './img/main-pin.svg',
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+  });
+
+  const mainMarker = L.marker(
+    {
+      lat:35.6825,
+      lng:139.7512,
+    },
+    {
+      draggable: true,
+      icon: pinIcon,
     },
   ).addTo(map);
 
@@ -49,24 +64,6 @@ const handleMap = (adsArray) => {
         .bindPopup(fillCard(element));
     });
   };
-
-
-  const pinIcon = L.icon({
-    iconUrl: './img/main-pin.svg',
-    iconSize: [36, 36],
-    iconAnchor: [18, 36],
-  });
-
-  const mainMarker = L.marker(
-    {
-      lat:35.6825,
-      lng:139.7512,
-    },
-    {
-      draggable: true,
-      icon: pinIcon,
-    },
-  ).addTo(map);
 
   getAddressByMarkerOnly();
 
