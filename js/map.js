@@ -2,8 +2,9 @@
 
 import {fillCard} from './elements-generator.js';
 import {changeFormStatus} from './form-handler.js';
+import {getData} from './api.js';
 
-const handleMap = (adsArray) => {
+const handleMap = () => {
 
   const onMapLoaded = () => changeFormStatus('enabled');
 
@@ -71,9 +72,9 @@ const handleMap = (adsArray) => {
 
   getAddressByMarkerOnly();
 
-  showAdsOnMap(adsArray);
-
   map.on('load', onMapLoaded());
+
+  showAdsOnMap(getData);
 }
 
 export {handleMap};
