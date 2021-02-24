@@ -37,7 +37,7 @@ const handleMap = (adsArray) => {
     },
   ).addTo(map);
 
-  const fillAddressByMarkerOnly = () => {
+  const setupAddressByMarkerOnly = () => {
     const addressField = document.querySelector('#address');
     const mainMarkerCoordinates = mainMarker.getLatLng();
 
@@ -69,7 +69,7 @@ const handleMap = (adsArray) => {
     });
   };
 
-  fillAddressByMarkerOnly();
+  setupAddressByMarkerOnly();
 
   showAdsOnMap(adsArray);
 
