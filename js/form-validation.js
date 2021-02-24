@@ -6,9 +6,13 @@ const validateForm = () => {
   const roomNumber = adForm.querySelector('#room_number');
   const guests = adForm.querySelector('#capacity');
 
-  adTitle.minLength = 30;
-  adTitle.maxLength = 100;
-  nightPrice.max = 1000000;
+  const MIN_TITLE_LENGTH = 30;
+  const MAX_TITLE_LENGTH = 100;
+  const MAX_PRICE = 1000000;
+
+  adTitle.minLength = MIN_TITLE_LENGTH;
+  adTitle.maxLength = MAX_TITLE_LENGTH;
+  nightPrice.max = MAX_PRICE;
 
   const onRoomNumberChange = () => {
     for (let element of guests.children) {
