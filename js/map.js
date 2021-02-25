@@ -4,6 +4,11 @@ import {fillCard} from './elements-generator.js';
 import {changeFormStatus} from './form-handler.js';
 import {getMapData} from './api.js';
 
+const DEFAULT_LAT = 35.68251;
+const DEFAULT_LNG = 139.75121;
+
+const addressField = document.querySelector('#address');
+
 const pinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
   iconSize: [36, 36],
@@ -12,8 +17,8 @@ const pinIcon = L.icon({
 
 const mainMarker = L.marker(
   {
-    lat:35.6825,
-    lng:139.7512,
+    lat: DEFAULT_LAT,
+    lng: DEFAULT_LNG,
   },
   {
     draggable: true,
@@ -29,8 +34,8 @@ const handleMap = () => {
 
   const map = L.map('map-canvas')
     .setView({
-      lat: 35.6825,
-      lng: 139.7593,
+      lat: DEFAULT_LAT,
+      lng: DEFAULT_LNG,
     }, 9);
 
   L.tileLayer(
@@ -43,11 +48,8 @@ const handleMap = () => {
   mainMarker.addTo(map);
 
   const setupAddressByMarkerOnly = () => {
-    const addressField = document.querySelector('#address');
-    const mainMarkerCoordinates = mainMarker.getLatLng();
-
     addressField.readOnly = true;
-    addressField.value = `${mainMarkerCoordinates.lat.toFixed(5)}, ${mainMarkerCoordinates.lng.toFixed(5)}`;
+    addressField.value = `${DEFAULT_LAT}, ${DEFAULT_LNG}`;
 
     mainMarker.on('moveend', (evt) => {
       const newCoordinates = evt.target.getLatLng();
@@ -102,4 +104,9 @@ const handleMap = () => {
   getMapData(showAdsOnMap, () => showMapAlert('Не удалось загрузить объявления с сервера'));
 }
 
-export {handleMap, mainMarker};
+const setDefaultMarkerPosition = () => {
+  mainMarker.setLatLng([DEFAULT_LAT, DEFAULT_LNG]);
+  addressField.value = `${DEFAULT_LAT}, ${DEFAULT_LNG}`;
+}
+
+export {handleMap, setDefaultMarkerPosition};

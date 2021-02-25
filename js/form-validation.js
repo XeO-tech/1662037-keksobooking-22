@@ -1,5 +1,4 @@
 import {sendFormData} from './api.js';
-import {mainMarker} from './map.js';
 
 const adForm = document.querySelector('.ad-form');
 
@@ -39,7 +38,6 @@ const validateForm = () => {
   };
 
   adTitle.addEventListener('input', () => {
-
     const valueLength = adTitle.value.length;
 
     if (valueLength < MIN_TITLE_LENGTH) {
@@ -60,20 +58,6 @@ const validateForm = () => {
   nightPrice.max = MAX_PRICE;
 }
 
-const setFormReset= () => {
-  adForm.addEventListener('reset', (evt) => {
-    evt.preventDefault();
-    console.log(1)
-    const mainMarkerCoordinates = mainMarker.getLatLng();
-
-    mainMarker.setLatLng([35.6825, 139.7512]);
-
-    const addressField = document.querySelector('#address');
-    addressField.value = `${mainMarkerCoordinates.lat.toFixed(5)}, ${mainMarkerCoordinates.lng.toFixed(5)}`;
-
-  })
-}
-
 const setFormSubmit = (onSuccess) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -86,4 +70,4 @@ const setFormSubmit = (onSuccess) => {
   });
 }
 
-export {validateForm, setFormSubmit, setFormReset}
+export {validateForm, setFormSubmit}

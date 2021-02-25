@@ -1,30 +1,35 @@
+import {setDefaultMarkerPosition} from './map.js';
+
+const adForm = document.querySelector('.ad-form');
+const placeType = adForm.querySelector('#type');
+const mapFilters = document.querySelector('.map__filters');
+
+
 const handleForm = () => {
-  const adForm = document.querySelector('.ad-form');
-  const placeType = adForm.querySelector('#type');
-  const nightPrice = adForm.querySelector('#price');
+  const BUNGALOW_MIN_PRICE = 0;
+  const FLAT_MIN_PRICE = 1000;
+  const HOUSE_MIN_PRICE = 5000;
+  const PALACE_MIN_PRICE = 10000;
+
   const checkIn = adForm.querySelector('#timein');
   const checkOut = adForm.querySelector('#timeout');
 
-  const onCheckInOut = (evt) => {
-    (evt.target === checkIn) ? checkOut.value = evt.target.value : checkIn.value = evt.target.value;
-  };
-
-  [checkIn, checkOut].forEach((element) => element.addEventListener('change', onCheckInOut));
-
   const setPlaceMinPrice = () => {
+    const nightPrice = adForm.querySelector('#price');
+
     let minPrice = 0;
     switch (placeType.value) {
       case 'bungalow':
-        minPrice = 0;
+        minPrice = BUNGALOW_MIN_PRICE;
         break;
       case 'flat':
-        minPrice = 1000;
+        minPrice = FLAT_MIN_PRICE;
         break;
       case 'house':
-        minPrice = 5000;
+        minPrice = HOUSE_MIN_PRICE;
         break;
       case 'palace':
-        minPrice = 10000;
+        minPrice = PALACE_MIN_PRICE;
         break;
     }
     nightPrice.min = nightPrice.placeholder = minPrice;
@@ -32,15 +37,28 @@ const handleForm = () => {
 
   const onPlaceTypeChanged = () => setPlaceMinPrice();
 
+  const onCheckInOut = (evt) => {
+    (evt.target === checkIn) ? checkOut.value = evt.target.value : checkIn.value = evt.target.value;
+  };
+
+  [checkIn, checkOut].forEach((element) => element.addEventListener('change', onCheckInOut));
+
+
   setPlaceMinPrice();
 
   placeType.addEventListener('change', onPlaceTypeChanged);
+
+  adForm.addEventListener('reset', () => {
+    setTimeout(() => {
+      setDefaultMarkerPosition();
+      setPlaceMinPrice();
+      mapFilters.reset();
+    }, 100);
+  });
 }
 
 const changeFormStatus = (status) => {
-  const adForm = document.querySelector('.ad-form');
   const adFormElements = adForm.querySelectorAll('.ad-form__element');
-  const mapFilters = document.querySelector('.map__filters');
   const mapFiltersElements = mapFilters.children;
 
   switch (status) {
