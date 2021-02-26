@@ -1,5 +1,3 @@
-import {sendFormData} from './api.js';
-
 const adForm = document.querySelector('.ad-form');
 
 const validateForm = () => {
@@ -58,16 +56,4 @@ const validateForm = () => {
   nightPrice.max = MAX_PRICE;
 }
 
-const setFormSubmit = (onSuccess) => {
-  adForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-
-    sendFormData(
-      () => onSuccess(),
-      () => console.log('Не удалось отправить форму', 'form'),
-      new FormData(evt.target),
-    );
-  });
-}
-
-export {validateForm, setFormSubmit}
+export {validateForm}

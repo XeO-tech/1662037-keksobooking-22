@@ -1,4 +1,6 @@
 import {setDefaultMarkerPosition} from './map.js';
+import {sendFormData} from './api.js';
+import {isEscEvent} from '/.util.js'
 
 const adForm = document.querySelector('.ad-form');
 const placeType = adForm.querySelector('#type');
@@ -41,13 +43,45 @@ const handleForm = () => {
     (evt.target === checkIn) ? checkOut.value = evt.target.value : checkIn.value = evt.target.value;
   };
 
-  [checkIn, checkOut].forEach((element) => element.addEventListener('change', onCheckInOut));
+  const showSuccessMessage = () => {
+    const successTemplate = document.querySelector('#success').content;
+    const successMessage = successTemplate.querySelector('.success').cloneNode(true);
+    document.querySelector('main').appendChild(successMessage);
 
+    document.addEventListener('keydown', (evt) => {
+      if (isEscEvent) {
+        evt.preventDefault();
+        successMessage.remove();
+      }
+    }, { once: true });
 
+    document.addEventListener('click', (evt) => {
+      successMessage.remove();
+    }, { once: true });
+  };
+
+  const showFailMessage = () => {
+
+  }
+  // Handling form fields
   setPlaceMinPrice();
+
+  [checkIn, checkOut].forEach((element) => element.addEventListener('change', onCheckInOut));
 
   placeType.addEventListener('change', onPlaceTypeChanged);
 
+  // Handling submitting
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendFormData(
+      () => showSuccessMessage(),
+      () => showFailMessage('Не удалось разместить объявление'),
+      new FormData(evt.target),
+    );
+  });
+
+  // Handling reset
   adForm.addEventListener('reset', () => {
     setTimeout(() => {
       setDefaultMarkerPosition();
