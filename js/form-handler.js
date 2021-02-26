@@ -1,11 +1,9 @@
 import {setDefaultMarkerPosition} from './map.js';
 import {sendFormData} from './api.js';
-import {isEscEvent} from '/.util.js'
+import {isEscEvent} from './util.js'
 
 const adForm = document.querySelector('.ad-form');
-const placeType = adForm.querySelector('#type');
 const mapFilters = document.querySelector('.map__filters');
-
 
 const handleForm = () => {
   const BUNGALOW_MIN_PRICE = 0;
@@ -13,6 +11,7 @@ const handleForm = () => {
   const HOUSE_MIN_PRICE = 5000;
   const PALACE_MIN_PRICE = 10000;
 
+  const placeType = adForm.querySelector('#type');
   const checkIn = adForm.querySelector('#timein');
   const checkOut = adForm.querySelector('#timeout');
 
@@ -43,26 +42,35 @@ const handleForm = () => {
     (evt.target === checkIn) ? checkOut.value = evt.target.value : checkIn.value = evt.target.value;
   };
 
+  const onFormMessageEscKeydown = (evt) => {
+    if (isEscEvent) {
+      evt.preventDefault();
+      document.querySelector('main').lastChild.remove();
+      document.removeEventListener('click', onFormMessageClick, { once: true });
+    }
+  };
+
+  const onFormMessageClick = () => {
+    document.querySelector('main').lastChild.remove();
+    document.removeEventListener('keydown', onFormMessageEscKeydown, { once: true });
+  };
+
   const showSuccessMessage = () => {
     const successTemplate = document.querySelector('#success').content;
     const successMessage = successTemplate.querySelector('.success').cloneNode(true);
     document.querySelector('main').appendChild(successMessage);
-
-    document.addEventListener('keydown', (evt) => {
-      if (isEscEvent) {
-        evt.preventDefault();
-        successMessage.remove();
-      }
-    }, { once: true });
-
-    document.addEventListener('click', (evt) => {
-      successMessage.remove();
-    }, { once: true });
+    document.addEventListener('keydown', onFormMessageEscKeydown, { once: true });
+    document.addEventListener('click', onFormMessageClick, { once: true });
   };
 
-  const showFailMessage = () => {
+  const showErrorMessage = () => {
+    const errorTemplate = document.querySelector('#error').content;
+    const errorMessage = errorTemplate.querySelector('.error').cloneNode(true);
+    document.querySelector('main').appendChild(errorMessage);
+    document.addEventListener('keydown', onFormMessageEscKeydown, { once: true });
+    document.addEventListener('click', onFormMessageClick, { once: true });
+  };
 
-  }
   // Handling form fields
   setPlaceMinPrice();
 
@@ -75,8 +83,11 @@ const handleForm = () => {
     evt.preventDefault();
 
     sendFormData(
-      () => showSuccessMessage(),
-      () => showFailMessage('Не удалось разместить объявление'),
+      () => {
+        showSuccessMessage();
+        adForm.reset();
+      },
+      showErrorMessage,
       new FormData(evt.target),
     );
   });
@@ -89,7 +100,8 @@ const handleForm = () => {
       mapFilters.reset();
     }, 100);
   });
-}
+};
+
 
 const changeFormStatus = (status) => {
   const adFormElements = adForm.querySelectorAll('.ad-form__element');
@@ -114,6 +126,6 @@ const changeFormStatus = (status) => {
       }
       break;
   }
-}
+};
 
 export {handleForm, changeFormStatus}

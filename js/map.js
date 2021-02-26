@@ -55,7 +55,7 @@ const handleMap = () => {
       const newCoordinates = evt.target.getLatLng();
       addressField.value = `${newCoordinates.lat.toFixed(5)}, ${newCoordinates.lng.toFixed(5)}`
     });
-  }
+  };
 
   const showAdsOnMap = (adsArray) => {
     const adsIcon = L.icon({
@@ -102,11 +102,11 @@ const handleMap = () => {
   map.on('load', onMapLoaded());
 
   getMapData(showAdsOnMap, () => showMapAlert('Не удалось загрузить объявления с сервера'));
-}
+};
 
 const setDefaultMarkerPosition = () => {
   mainMarker.setLatLng([DEFAULT_LAT, DEFAULT_LNG]);
   addressField.value = `${DEFAULT_LAT}, ${DEFAULT_LNG}`;
-}
+};
 
 export {handleMap, setDefaultMarkerPosition};

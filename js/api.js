@@ -7,9 +7,8 @@ const getMapData = (onSuccess, onFail) => {
     .catch(() => onFail());
 };
 
-
 const sendFormData = (onSuccess, onFail, body) => {
-  fetch('https://22.javascript.pages.academy/keksobooking',
+  fetch('https://22.javascript.pages.academy/keksobooking2',
     {
       method: 'POST',
       body,
@@ -18,9 +17,9 @@ const sendFormData = (onSuccess, onFail, body) => {
       if (response.ok) {
         onSuccess();
       } else {
-        onFail('Не удалось отправить форму. Попробуйте ещё раз')
+        onFail();
       }
-    })
+    });
 };
 
 export {getMapData, sendFormData}
