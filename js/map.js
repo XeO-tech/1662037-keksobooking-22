@@ -30,6 +30,9 @@ const mainMarker = L.marker(
 const handleMap = () => {
 
   const ALERT_SHOW_TIME = 5000;
+  const MAX_ADS_ON_MAP = 10;
+
+  const typeFilter = document.querySelector('#housing-type')
 
   const setupAddressByMarkerOnly = () => {
     addressField.readOnly = true;
@@ -52,7 +55,8 @@ const handleMap = () => {
       adsMarkersLayer.clearLayers();
     }
 
-    adsArray.forEach((element) => {
+    adsArray.slice(0, MAX_ADS_ON_MAP).forEach((element) => {
+      console.log(element)
       L.marker({
         lat: element.location.lat,
         lng: element.location.lng,
@@ -89,13 +93,25 @@ const handleMap = () => {
     }, ALERT_SHOW_TIME);
   };
 
+  const setTypeFilter = (adsArray) => {
+    typeFilter.addEventListener('change', (evt) => {
+      if (evt.target.value !== 'any') {
+        showAdsOnMap(adsArray
+          .slice()
+          .filter((element) => element.offer.type === evt.target.value));
+      } else {
+        showAdsOnMap(adsArray);
+      }
+    })
+  };
+
   const onMapLoaded = () => {
     changeFormStatus('form_fields_enabled');
     getMapData((adsArray) => {
       showAdsOnMap(adsArray);
       changeFormStatus('filters_enabled');
-      //console.log(map)
-      // Обработчики событий на поля формы
+
+      setTypeFilter(adsArray);
     },
     () => showMapAlert('Не удалось загрузить объявления с сервера'),
     );
