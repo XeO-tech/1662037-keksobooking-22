@@ -8,6 +8,7 @@ const DEFAULT_LAT = 35.68251;
 const DEFAULT_LNG = 139.75121;
 
 const addressField = document.querySelector('#address');
+const adsMarkersLayer = L.layerGroup();
 
 const pinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
@@ -47,6 +48,10 @@ const handleMap = () => {
       iconAnchor: [16, 32],
     });
 
+    if (adsMarkersLayer.getLayers().length > 0) {
+      adsMarkersLayer.clearLayers();
+    }
+
     adsArray.forEach((element) => {
       L.marker({
         lat: element.location.lat,
@@ -55,9 +60,12 @@ const handleMap = () => {
       {
         icon: adsIcon,
       })
-        .addTo(map)
+        .addTo(adsMarkersLayer)
         .bindPopup(fillCard(element));
     });
+
+    adsMarkersLayer.addTo(map);
+    console.log(adsMarkersLayer.getLayers().length)
   };
 
   const showMapAlert = (message) => {
