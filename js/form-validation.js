@@ -41,7 +41,7 @@ const validateForm = () => {
     if (valueLength < MIN_TITLE_LENGTH) {
       adTitle.setCustomValidity('Ещё ' + (MIN_TITLE_LENGTH - valueLength) +' символов.');
     } else if (valueLength > MAX_TITLE_LENGTH) {
-      adTitle.setCustomValidity('Удалите лишние ' + (valueLength - MAX_TITLE_LENGTH) +' символов.');
+      adTitle.setCustomValidity('Удалите лишние ' + (valueLength - MAX_TITLE_LENGTH) + ' символов.');
     } else {
       adTitle.setCustomValidity('');
     }

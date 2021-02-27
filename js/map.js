@@ -63,6 +63,7 @@ const handleMap = () => {
       iconSize: [32, 32],
       iconAnchor: [16, 32],
     });
+
     adsArray.forEach((element) => {
       L.marker({
         lat: element.location.lat,
@@ -88,8 +89,8 @@ const handleMap = () => {
     alertContainer.style.textAlign = 'center';
     alertContainer.style.backgroundColor = 'red';
     alertContainer.style.opacity = 0.8;
-
     alertContainer.textContent = message;
+    
     document.querySelector('#map-canvas').append(alertContainer);
 
     setTimeout(() => {
