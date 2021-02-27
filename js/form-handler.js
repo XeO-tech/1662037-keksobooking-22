@@ -71,7 +71,7 @@ const handleForm = () => {
     const errorTemplate = document.querySelector('#error').content;
     const errorMessage = errorTemplate.querySelector('.error').cloneNode(true);
     document.querySelector('main').appendChild(errorMessage);
-    
+
     document.addEventListener('keydown', onFormMessageEscKeydown, { once: true });
     document.addEventListener('click', onFormMessageClick, { once: true });
   };
@@ -122,9 +122,12 @@ const changeFormStatus = (status) => {
       }
       break;
 
-    case 'enabled':
+    case 'form_fields_enabled':
       adForm.classList.remove('ad-form--disabled');
       adFormElements.forEach((element) => element.disabled = false);
+      break;
+
+    case 'filters_enabled':
       mapFilters.classList.remove('map__filters--disabled');
       for (let element of mapFiltersElements) {
         element.disabled = false;
