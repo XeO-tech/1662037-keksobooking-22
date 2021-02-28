@@ -30,8 +30,38 @@ const handleForm = () => {
     nightPrice.min = nightPrice.placeholder = minPrice;
   };
 
+  const onPlaceTypeChanged = () => setPlaceMinPrice();
+
   setPlaceMinPrice();
 
-  placeType.addEventListener('change', setPlaceMinPrice);
+  placeType.addEventListener('change', onPlaceTypeChanged);
 }
-export {handleForm}
+
+const changeFormStatus = (status) => {
+  const adForm = document.querySelector('.ad-form');
+  const adFormElements = adForm.querySelectorAll('.ad-form__element');
+  const mapFilters = document.querySelector('.map__filters');
+  const mapFiltersElements = mapFilters.children;
+
+  switch (status) {
+    case 'disabled':
+      adForm.classList.add('ad-form--disabled');
+      adFormElements.forEach((element) => element.disabled = true);
+      mapFilters.classList.add('map__filters--disabled');
+      for (let element of mapFiltersElements) {
+        element.disabled = true;
+      }
+      break;
+
+    case 'enabled':
+      adForm.classList.remove('ad-form--disabled');
+      adFormElements.forEach((element) => element.disabled = false);
+      mapFilters.classList.remove('map__filters--disabled');
+      for (let element of mapFiltersElements) {
+        element.disabled = false;
+      }
+      break;
+  }
+}
+
+export {handleForm, changeFormStatus}
