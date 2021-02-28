@@ -1,59 +1,65 @@
-const validateForm = () => {
+const setupFormValidity = () => {
 
   const adForm = document.querySelector('.ad-form');
-  const adTitle = adForm.querySelector('#title');
-  const nightPrice = adForm.querySelector('#price');
-  const roomNumber = adForm.querySelector('#room_number');
-  const guests = adForm.querySelector('#capacity');
+  const adTitleField = adForm.querySelector('#title');
+  const nightPriceField = adForm.querySelector('#price');
+  const roomNumberField = adForm.querySelector('#room_number');
+  const guestsNumberField = adForm.querySelector('#capacity');
 
   const MIN_TITLE_LENGTH = 30;
   const MAX_TITLE_LENGTH = 100;
   const MAX_PRICE = 1000000;
 
-  const onRoomNumberChange = () => {
-    for (let element of guests.children) {
+  const changeRoomNumber = () => {
+
+    const guestsFor1RoomOption = guestsNumberField.querySelector('option[value=\'1\']');
+    const guestsFor100RoomsOption = guestsNumberField.querySelector('option[value=\'0\']');
+
+    for (let element of guestsNumberField.children) {
       element.disabled = true;
       element.selected = false;
     }
 
-    switch (roomNumber.value) {
+    switch (roomNumberField.value) {
       case '3':
-        guests.querySelector('option[value=\'3\']').disabled = false;
+        guestsNumberField.querySelector('option[value=\'3\']').disabled = false;
         // falls through
       case '2':
-        guests.querySelector('option[value=\'2\']').disabled = false;
+        guestsNumberField.querySelector('option[value=\'2\']').disabled = false;
         // falls through
       case '1':
-        guests.querySelector('option[value=\'1\']').disabled = false;
-        guests.querySelector('option[value=\'1\']').selected = true;
+        guestsFor1RoomOption.disabled = false;
+        guestsFor1RoomOption.selected = true;
         break;
       case '100':
-        guests.querySelector('option[value=\'0\']').disabled = false;
-        guests.querySelector('option[value=\'0\']').selected = true;
+        guestsFor100RoomsOption.disabled = false;
+        guestsFor100RoomsOption.selected = true;
         break;
     }
   };
 
-  adTitle.addEventListener('input', () => {
+  const onRoomNumberFieldChange = () => changeRoomNumber();
 
-    const valueLength = adTitle.value.length;
+  adTitleField.addEventListener('input', () => {
+
+    const valueLength = adTitleField.value.length;
 
     if (valueLength < MIN_TITLE_LENGTH) {
-      adTitle.setCustomValidity('Ещё ' + (MIN_TITLE_LENGTH - valueLength) +' символов.');
+      adTitleField.setCustomValidity('Ещё ' + (MIN_TITLE_LENGTH - valueLength) +' символов.');
     } else if (valueLength > MAX_TITLE_LENGTH) {
-      adTitle.setCustomValidity('Удалите лишние ' + (valueLength - MAX_TITLE_LENGTH) +' символов.');
+      adTitleField.setCustomValidity('Удалите лишние ' + (valueLength - MAX_TITLE_LENGTH) +' символов.');
     } else {
-      adTitle.setCustomValidity('');
+      adTitleField.setCustomValidity('');
     }
 
-    adTitle.reportValidity();
+    adTitleField.reportValidity();
   });
 
-  document.addEventListener('DOMContentLoaded', onRoomNumberChange);
+  changeRoomNumber();
 
-  roomNumber.addEventListener('change', onRoomNumberChange);
+  roomNumberField.addEventListener('change', onRoomNumberFieldChange);
 
-  nightPrice.max = MAX_PRICE;
+  nightPriceField.max = MAX_PRICE;
 }
 
-export {validateForm}
+export {setupFormValidity}
