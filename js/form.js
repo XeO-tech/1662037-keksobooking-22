@@ -206,7 +206,6 @@ const setupFormValidity = () => {
   roomNumberField.addEventListener('change', onRoomNumberChange);
 
   nightPriceField.max = MAX_PRICE;
-  nightPriceField.setCustomValidity(`Максимальная цена не должна превышать ${MAX_PRICE} рублей`);
 }
 
 export {handleForm, changeFormStatus, setupFormValidity}
