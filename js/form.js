@@ -126,7 +126,7 @@ const setupFormValidity = () => {
 
     } else if (valueLength > MAX_TITLE_LENGTH) {
       adTitleField.setCustomValidity(`Удалите ${valueLength - MAX_TITLE_LENGTH} ${defineWordEnding(valueLength - MAX_TITLE_LENGTH, 'символ')}`);
-      
+
     } else {
       adTitleField.setCustomValidity('');
     }
@@ -139,7 +139,6 @@ const setupFormValidity = () => {
   roomNumberField.addEventListener('change', onRoomNumberFieldChange);
 
   nightPriceField.max = MAX_PRICE;
-  nightPriceField.setCustomValidity(`Максимальная цена не должна превышать ${MAX_PRICE} рублей`);
 }
 
 export {handleForm, changeFormStatus, setupFormValidity}
