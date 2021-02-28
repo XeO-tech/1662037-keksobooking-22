@@ -69,7 +69,6 @@ const handleMap = () => {
     });
 
     adsMarkersLayer.addTo(map);
-    console.log(adsMarkersLayer.getLayers().length)
   };
 
   const showMapAlert = (message) => {
@@ -97,7 +96,6 @@ const handleMap = () => {
     typeFilter.addEventListener('change', (evt) => {
       if (evt.target.value !== 'any') {
         showAdsOnMap(adsArray
-          .slice()
           .filter((element) => element.offer.type === evt.target.value));
       } else {
         showAdsOnMap(adsArray);
