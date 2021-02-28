@@ -1,7 +1,7 @@
 /* global L:readonly */
 
 import {fillCard} from './elements-generator.js';
-import {changeFormStatus} from './form-handler.js';
+import {changeFormStatus} from './form.js';
 import {getMapData} from './api.js';
 
 const DEFAULT_LAT = 35.68251;
