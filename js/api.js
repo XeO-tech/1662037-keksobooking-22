@@ -8,7 +8,7 @@ const getMapData = (onSuccess, onFail) => {
 };
 
 const sendFormData = (onSuccess, onFail, body) => {
-  fetch('https://22.javascript.pages.academy/keksobooking2',
+  fetch('https://22.javascript.pages.academy/keksobooking',
     {
       method: 'POST',
       body,

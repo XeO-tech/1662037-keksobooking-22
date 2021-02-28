@@ -1,7 +1,7 @@
 /* global L:readonly */
 
 import {fillCard} from './elements-generator.js';
-import {changeFormStatus} from './form-handler.js';
+import {changeFormStatus} from './form.js';
 import {getMapData} from './api.js';
 
 const DEFAULT_LAT = 35.68251;
@@ -90,7 +90,7 @@ const handleMap = () => {
     alertContainer.style.backgroundColor = 'red';
     alertContainer.style.opacity = 0.8;
     alertContainer.textContent = message;
-    
+
     document.querySelector('#map-canvas').append(alertContainer);
 
     setTimeout(() => {
