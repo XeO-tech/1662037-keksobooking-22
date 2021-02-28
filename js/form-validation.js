@@ -44,10 +44,23 @@ const setupFormValidity = () => {
 
     const valueLength = adTitleField.value.length;
 
+    const defineWordEnding = (number, word) => {
+      switch (true) {
+        case (number % 10 === 1 && number !== 11):
+          return word;
+        case (number % 10 === 2 && number !== 12):
+        case (number % 10 === 3 && number !== 13):
+        case (number % 10 === 4 && number !== 14):
+          return word + 'а';
+        default:
+          return word + 'ов';
+      }
+    }
+
     if (valueLength < MIN_TITLE_LENGTH) {
-      adTitleField.setCustomValidity('Ещё ' + (MIN_TITLE_LENGTH - valueLength) +' символов.');
+      adTitleField.setCustomValidity(`Еще ${MIN_TITLE_LENGTH - valueLength} ${defineWordEnding(MIN_TITLE_LENGTH - valueLength, 'символ')}`);
     } else if (valueLength > MAX_TITLE_LENGTH) {
-      adTitleField.setCustomValidity('Удалите лишние ' + (valueLength - MAX_TITLE_LENGTH) +' символов.');
+      adTitleField.setCustomValidity(`Удалите ${valueLength - MAX_TITLE_LENGTH} ${defineWordEnding(valueLength - MAX_TITLE_LENGTH, 'символ')}`);
     } else {
       adTitleField.setCustomValidity('');
     }
