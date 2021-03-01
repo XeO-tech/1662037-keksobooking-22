@@ -91,7 +91,7 @@ const handleForm = () => {
         showSuccessMessage();
         adForm.reset();
       },
-      showErrorMessage(),
+      showErrorMessage,
       new FormData(evt.target),
     );
   });

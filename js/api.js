@@ -4,7 +4,7 @@ const getMapData = (onSuccess, onFail) => {
     .then((adsArray) => {
       onSuccess(adsArray);
     })
-    .catch(onFail());
+    .catch(() => onFail());
 };
 
 const sendFormData = (onSuccess, onFail, body) => {
@@ -19,6 +19,9 @@ const sendFormData = (onSuccess, onFail, body) => {
       } else {
         onFail();
       }
+    })
+    .catch(() => {
+      onFail();
     });
 };
 
