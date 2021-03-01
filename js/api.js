@@ -20,9 +20,7 @@ const sendFormData = (onSuccess, onFail, body) => {
         onFail();
       }
     })
-    .catch(() => {
-      onFail();
-    });
+    .catch(() => onFail());
 };
 
 export {getMapData, sendFormData}
