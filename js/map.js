@@ -1,7 +1,7 @@
 /* global L:readonly */
 
 import {fillCard} from './elements-generator.js';
-import {changeFormStatus} from './form-handler.js';
+import {changeFormStatus} from './form.js';
 
 const handleMap = (adsArray) => {
 
