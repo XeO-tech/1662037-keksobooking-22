@@ -56,7 +56,6 @@ const handleMap = () => {
     }
 
     adsArray.slice(0, MAX_ADS_ON_MAP).forEach((element) => {
-      console.log(element)
       L.marker({
         lat: element.location.lat,
         lng: element.location.lng,
