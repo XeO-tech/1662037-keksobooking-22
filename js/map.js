@@ -35,6 +35,8 @@ const handleMap = () => {
   const typeFilter = document.querySelector('#housing-type');
   const roomFilter = document.querySelector('#housing-rooms');
   const priceFilter = document.querySelector('#housing-price');
+  const guestsFilter = document.querySelector('#housing-guests');
+
 
 
   let lastUsedFilter = '';
@@ -96,24 +98,13 @@ const handleMap = () => {
       alertContainer.remove();
     }, ALERT_SHOW_TIME);
   };
-  const filtersDescription = {
-    TYPE_FILTER: {
-      filter_function: 'filterTypeField',
-      field_to_receive_data_from: 'offer.type',
-    },
-
-  }
-
-  // const filterNonRangeFields = (array, filterName) => {
-
-  // }
 
   const filterTypeField = (array) => {
     if (typeFilter.value === 'any') {
-      return array;
+      return array.slice();
     }
     return array.filter((element) => {
-      return element.offer.type.toString() === typeFilter.value
+      return element.offer.type === typeFilter.value
     });
   };
 
@@ -142,6 +133,17 @@ const handleMap = () => {
     })
   }
 
+  const filterGuestsField = (array) => {
+    if (guestsFilter.value === 'any') {
+      return array;
+    }
+    return array.filter((element) => {
+      return element.offer.guests.toString() === guestsFilter.value
+    })
+  };
+
+  const filterFunctionsList = [filterTypeField, filterRoomField, filterPriceField, filterGuestsField];
+
   const setTypeFilter =  (adsArray) => {
     let isUsedBefore = false;
     let beforeFilterApplied = [];
@@ -160,9 +162,8 @@ const handleMap = () => {
           showAdsOnMap(currentAdsOnMap);
           break;
         case (isUsedBefore && lastUsedFilter !== evt.target.name):
-          currentAdsOnMap = [...adsArray];
           currentAdsOnMap = filterRoomField(adsArray);
-          currentAdsOnMap = filterTypeField(currentAdsOnMap);
+          currentAdsOnMap = filterPriceField(currentAdsOnMap);
           beforeFilterApplied = [...currentAdsOnMap];
           currentAdsOnMap = filterTypeField(currentAdsOnMap);
           showAdsOnMap(currentAdsOnMap);
@@ -190,7 +191,6 @@ const handleMap = () => {
           showAdsOnMap(currentAdsOnMap);
           break;
         case (isUsedBefore && lastUsedFilter !== evt.target.name):
-          currentAdsOnMap = [...adsArray];
           currentAdsOnMap = filterTypeField(adsArray);
           currentAdsOnMap = filterPriceField(currentAdsOnMap);
           beforeFilterApplied = [...currentAdsOnMap];
@@ -220,7 +220,6 @@ const handleMap = () => {
           showAdsOnMap(currentAdsOnMap);
           break;
         case (isUsedBefore && lastUsedFilter !== evt.target.name):
-          currentAdsOnMap = [...adsArray];
           currentAdsOnMap = filterRoomField(adsArray);
           currentAdsOnMap = filterTypeField(currentAdsOnMap);
           beforeFilterApplied = [...currentAdsOnMap];
@@ -230,6 +229,38 @@ const handleMap = () => {
       }
     };
     priceFilter.addEventListener('change', onFilterChange);
+  };
+
+  const setupFilterHandler = (adsArray, filterField, filterFunction) => {
+    let isUsedBefore = false;
+    let beforeFilterApplied = [];
+    const onFilterChange = (evt) => {
+      switch (true) {
+        case (!isUsedBefore):
+          beforeFilterApplied = [...currentAdsOnMap];
+          currentAdsOnMap = filterFunction(currentAdsOnMap);
+          showAdsOnMap(currentAdsOnMap);
+          isUsedBefore = true;
+          lastUsedFilter = evt.target.name;
+          break;
+        case (isUsedBefore && lastUsedFilter === evt.target.name):
+          currentAdsOnMap = [...beforeFilterApplied]
+          currentAdsOnMap = filterFunction(currentAdsOnMap);
+          showAdsOnMap(currentAdsOnMap);
+          break;
+        case (isUsedBefore && lastUsedFilter !== evt.target.name):
+          currentAdsOnMap = [...adsArray]
+          filterFunctionsList
+            .filter((element) => element !== filterFunction)
+            .forEach((element) => currentAdsOnMap = element(currentAdsOnMap));
+          beforeFilterApplied = [...currentAdsOnMap];
+          currentAdsOnMap = filterFunction(currentAdsOnMap);
+          showAdsOnMap(currentAdsOnMap);
+          lastUsedFilter = evt.target.name;
+      }
+    };
+    console.log(filterField)
+    filterField.addEventListener('change', onFilterChange);
   };
 
   const onMapLoaded = () => {
@@ -242,6 +273,7 @@ const handleMap = () => {
       setTypeFilter(adsArray);
       setRoomFilter(adsArray);
       setPriceFilter(adsArray);
+      setupFilterHandler(adsArray, guestsFilter, filterGuestsField)
 
     },
     () => showMapAlert('Не удалось загрузить объявления с сервера'),
