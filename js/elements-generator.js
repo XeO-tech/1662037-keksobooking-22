@@ -19,7 +19,7 @@ const fillCard = (data) => {
       default:
         return '';
     }
-  }
+  };
 
   const textDataAlias = {
     'popup__text--address': data.offer.address,
@@ -29,7 +29,7 @@ const fillCard = (data) => {
     'popup__text--price': (data.offer.price !== '') ? data.offer.price + ' ₽/ночь' : '',
     'popup__text--time': (data.offer.checkin !== '' && data.offer.checkout !== '') ? `Заезд после ${data.offer.checkin}, выезд до ${data.offer.checkout}.` : '',
     'popup__text--capacity': (data.offer.rooms!== '' && data.offer.guests !== '') ? `${data.offer.rooms} комнаты для ${data.offer.guests} гостей.` : '',
-  }
+  };
 
   // Showing simple text data
   for (let key in textDataAlias) {

@@ -1,31 +1,42 @@
+import {setDefaultMarkerPosition} from './map.js';
+import {sendFormData} from './api.js';
+import {isEscEvent} from './util.js'
+
 const adForm = document.querySelector('.ad-form');
 const nightPriceField = adForm.querySelector('#price');
+const mapFilters = document.querySelector('.map__filters');
 
 const handleForm = () => {
-  const placeType = adForm.querySelector('#type');
-  const checkIn = adForm.querySelector('#timein');
-  const checkOut = adForm.querySelector('#timeout');
+  const placeTypeField = adForm.querySelector('#type');
+  const checkInField = adForm.querySelector('#timein');
+  const checkOutField = adForm.querySelector('#timeout');
+
+  const minPrices = {
+    bungalow: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000,
+  };
+  const FORM_RESET_DELAY = 100;
 
   const onCheckInOut = (evt) => {
-    (evt.target === checkIn) ? checkOut.value = evt.target.value : checkIn.value = evt.target.value;
+    (evt.target === checkInField) ? checkOutField.value = evt.target.value : checkInField.value = evt.target.value;
   };
-
-  [checkIn, checkOut].forEach((element) => element.addEventListener('change', onCheckInOut));
 
   const setPlaceMinPrice = () => {
     let minPrice = 0;
-    switch (placeType.value) {
+    switch (placeTypeField.value) {
       case 'bungalow':
-        minPrice = 0;
+        minPrice = minPrices.bungalow;
         break;
       case 'flat':
-        minPrice = 1000;
+        minPrice = minPrices.flat;
         break;
       case 'house':
-        minPrice = 5000;
+        minPrice = minPrices.house;
         break;
       case 'palace':
-        minPrice = 10000;
+        minPrice = minPrices.palace;
         break;
     }
     nightPriceField.min = nightPriceField.placeholder = minPrice;
@@ -33,14 +44,70 @@ const handleForm = () => {
 
   const onPlaceTypeChanged = () => setPlaceMinPrice();
 
+  const onFormMessageEscKeydown = (evt) => {
+    if (isEscEvent) {
+      evt.preventDefault();
+      document.querySelector('main').lastChild.remove();
+      document.removeEventListener('click', onFormMessageClick, { once: true });
+    }
+  };
+
+  const onFormMessageClick = () => {
+    document.querySelector('main').lastChild.remove();
+    document.removeEventListener('keydown', onFormMessageEscKeydown, { once: true });
+  };
+
+  const showSuccessMessage = () => {
+    const successTemplate = document.querySelector('#success').content;
+    const successMessage = successTemplate.querySelector('.success').cloneNode(true);
+    document.querySelector('main').appendChild(successMessage);
+
+    document.addEventListener('keydown', onFormMessageEscKeydown, { once: true });
+    document.addEventListener('click', onFormMessageClick, { once: true });
+  };
+
+  const showErrorMessage = () => {
+    const errorTemplate = document.querySelector('#error').content;
+    const errorMessage = errorTemplate.querySelector('.error').cloneNode(true);
+    document.querySelector('main').appendChild(errorMessage);
+
+    document.addEventListener('keydown', onFormMessageEscKeydown, { once: true });
+    document.addEventListener('click', onFormMessageClick, { once: true });
+  };
+
+  // Handling form fields
   setPlaceMinPrice();
 
-  placeType.addEventListener('change', onPlaceTypeChanged);
+  [checkInField, checkOutField].forEach((element) => element.addEventListener('change', onCheckInOut));
+
+  placeTypeField.addEventListener('change', onPlaceTypeChanged);
+
+  // Handling submitting
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendFormData(
+      () => {
+        showSuccessMessage();
+        adForm.reset();
+      },
+      showErrorMessage,
+      new FormData(evt.target),
+    );
+  });
+
+  // Handling reset
+  adForm.addEventListener('reset', () => {
+    setTimeout(() => {
+      setDefaultMarkerPosition();
+      setPlaceMinPrice();
+      mapFilters.reset();
+    }, FORM_RESET_DELAY);
+  });
 }
 
 const changeFormStatus = (status) => {
   const adFormElements = adForm.querySelectorAll('.ad-form__element');
-  const mapFilters = document.querySelector('.map__filters');
   const mapFiltersElements = mapFilters.children;
 
   switch (status) {
@@ -102,7 +169,7 @@ const setupFormValidity = () => {
     }
   };
 
-  const onRoomNumberFieldChange = () => changeRoomNumber();
+  const onRoomNumberChange = () => changeRoomNumber();
 
   adTitleField.addEventListener('input', () => {
 
@@ -136,7 +203,7 @@ const setupFormValidity = () => {
 
   changeRoomNumber();
 
-  roomNumberField.addEventListener('change', onRoomNumberFieldChange);
+  roomNumberField.addEventListener('change', onRoomNumberChange);
 
   nightPriceField.max = MAX_PRICE;
 }

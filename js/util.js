@@ -8,5 +8,10 @@ const getFloatFromRange = (min, max, decimal) => {
     return max;
   }
   return Number((Math.random() * (Math.abs(max - min)) + Math.min(max, min)).toFixed(decimal));
-}
-export {getIntFromRange, getFloatFromRange};
+};
+
+const isEscEvent = (evt) => {
+  return evt.key === ('Escape' || 'Esc');
+};
+
+export {getIntFromRange, getFloatFromRange, isEscEvent};
