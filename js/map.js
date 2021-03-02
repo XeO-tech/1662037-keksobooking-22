@@ -34,6 +34,8 @@ const handleMap = () => {
 
   const typeFilter = document.querySelector('#housing-type');
   const roomFilter = document.querySelector('#housing-rooms');
+  const priceFilter = document.querySelector('#housing-price');
+
 
   let lastUsedFilter = '';
   let currentAdsOnMap = [];
@@ -94,14 +96,51 @@ const handleMap = () => {
       alertContainer.remove();
     }, ALERT_SHOW_TIME);
   };
+  const filtersDescription = {
+    TYPE_FILTER: {
+      filter_function: 'filterTypeField',
+      field_to_receive_data_from: 'offer.type',
+    },
+
+  }
+
+  // const filterNonRangeFields = (array, filterName) => {
+
+  // }
 
   const filterTypeField = (array) => {
-    return array.filter((element) => element.offer.type.toString() === typeFilter.value);
+    if (typeFilter.value === 'any') {
+      return array;
+    }
+    return array.filter((element) => {
+      return element.offer.type.toString() === typeFilter.value
+    });
   };
 
   const filterRoomField = (array) => {
-    return array.filter((element) => element.offer.rooms.toString() === roomFilter.value)
+    if (roomFilter.value === 'any') {
+      return array;
+    }
+    return array.filter((element) => {
+      return element.offer.rooms.toString() === roomFilter.value
+    })
   };
+
+  const filterPriceField = (array) => {
+    if (priceFilter.value === 'any') {
+      return array;
+    }
+    return array.filter((element) => {
+      switch (priceFilter.value) {
+        case ('high'):
+          return element.offer.price >= 50000;
+        case ('middle'):
+          return (element.offer.price >= 10000 && element.offer.price < 50000);
+        case ('low'):
+          return element.offer.price < 10000;
+      }
+    })
+  }
 
   const setTypeFilter =  (adsArray) => {
     let isUsedBefore = false;
@@ -109,45 +148,24 @@ const handleMap = () => {
     const onFilterChange = (evt) => {
       switch (true) {
         case (!isUsedBefore):
-          console.log('type, не использован ранее')
-          console.log('старый currentAdsOnMap - ', currentAdsOnMap)
-
           beforeFilterApplied = [...currentAdsOnMap];
           currentAdsOnMap = filterTypeField(currentAdsOnMap);
-          console.log('новый currentAdsOnMap - ', currentAdsOnMap)
-
           showAdsOnMap(currentAdsOnMap);
-
           isUsedBefore = true;
           lastUsedFilter = evt.target.name;
           break;
         case (isUsedBefore && lastUsedFilter === evt.target.name):
-          console.log('type, использован ранее, предыдущий он же')
-          if (evt.target.value === 'any') {
-            currentAdsOnMap = [...beforeFilterApplied]
-            showAdsOnMap(currentAdsOnMap);
-          } else {
-            currentAdsOnMap = [...beforeFilterApplied]
-            currentAdsOnMap = filterTypeField(currentAdsOnMap);
-            showAdsOnMap(currentAdsOnMap);
-          }
+          currentAdsOnMap = [...beforeFilterApplied]
+          currentAdsOnMap = filterTypeField(currentAdsOnMap);
+          showAdsOnMap(currentAdsOnMap);
           break;
         case (isUsedBefore && lastUsedFilter !== evt.target.name):
-          console.log('type, использован ранее, предыдущий НЕ он же')
-          // Применяем все активные фильтры
           currentAdsOnMap = [...adsArray];
-          console.log(currentAdsOnMap)
-          if (roomFilter.value !== 'any') {
-            currentAdsOnMap = filterRoomField(adsArray);
-            console.log('применился filterRoomField, currentAdsOnMap - ',currentAdsOnMap)
-          }
-          beforeFilterApplied = [...currentAdsOnMap];
-          
+          currentAdsOnMap = filterRoomField(adsArray);
           currentAdsOnMap = filterTypeField(currentAdsOnMap);
-          console.log('применился filterTypeField, currentAdsOnMap - ',currentAdsOnMap)
-
+          beforeFilterApplied = [...currentAdsOnMap];
+          currentAdsOnMap = filterTypeField(currentAdsOnMap);
           showAdsOnMap(currentAdsOnMap);
-
           lastUsedFilter = evt.target.name;
       }
     };
@@ -160,48 +178,58 @@ const handleMap = () => {
     const onFilterChange = (evt) => {
       switch (true) {
         case (!isUsedBefore):
-          console.log('room, не использован ранее')
-          console.log('старый currentAdsOnMap - ', currentAdsOnMap)
-
           beforeFilterApplied = [...currentAdsOnMap];
           currentAdsOnMap = filterRoomField(currentAdsOnMap);
-          console.log('новый currentAdsOnMap - ', currentAdsOnMap)
-
           showAdsOnMap(currentAdsOnMap);
-
           isUsedBefore = true;
           lastUsedFilter = evt.target.name;
           break;
         case (isUsedBefore && lastUsedFilter === evt.target.name):
-          console.log('room, использован ранее, предыдущий он же')
-
-          if (evt.target.value === 'any') {
-            currentAdsOnMap = [...beforeFilterApplied]
-            showAdsOnMap(currentAdsOnMap);
-          } else {
-            currentAdsOnMap = [...beforeFilterApplied]
-            currentAdsOnMap = filterRoomField(currentAdsOnMap);
-            showAdsOnMap(currentAdsOnMap);
-          }
-          break;
-        case (isUsedBefore && lastUsedFilter !== evt.target.name):
-          // Применяем все активные фильтры
-          console.log('room, использован ранее, предыдущий НЕ он же')
-          currentAdsOnMap = [...adsArray];
-
-          if (typeFilter.value !== 'any') {
-            currentAdsOnMap = filterTypeField(adsArray);
-          }
-          beforeFilterApplied = [...currentAdsOnMap];
-
+          currentAdsOnMap = [...beforeFilterApplied]
           currentAdsOnMap = filterRoomField(currentAdsOnMap);
           showAdsOnMap(currentAdsOnMap);
-
+          break;
+        case (isUsedBefore && lastUsedFilter !== evt.target.name):
+          currentAdsOnMap = [...adsArray];
+          currentAdsOnMap = filterTypeField(adsArray);
+          currentAdsOnMap = filterPriceField(currentAdsOnMap);
+          beforeFilterApplied = [...currentAdsOnMap];
+          currentAdsOnMap = filterRoomField(currentAdsOnMap);
+          showAdsOnMap(currentAdsOnMap);
           lastUsedFilter = evt.target.name;
       }
     };
-
     roomFilter.addEventListener('change', onFilterChange);
+  };
+
+  const setPriceFilter = (adsArray) => {
+    let isUsedBefore = false;
+    let beforeFilterApplied = [];
+    const onFilterChange = (evt) => {
+      switch (true) {
+        case (!isUsedBefore):
+          beforeFilterApplied = [...currentAdsOnMap];
+          currentAdsOnMap = filterPriceField(currentAdsOnMap);
+          showAdsOnMap(currentAdsOnMap);
+          isUsedBefore = true;
+          lastUsedFilter = evt.target.name;
+          break;
+        case (isUsedBefore && lastUsedFilter === evt.target.name):
+          currentAdsOnMap = [...beforeFilterApplied]
+          currentAdsOnMap = filterPriceField(currentAdsOnMap);
+          showAdsOnMap(currentAdsOnMap);
+          break;
+        case (isUsedBefore && lastUsedFilter !== evt.target.name):
+          currentAdsOnMap = [...adsArray];
+          currentAdsOnMap = filterRoomField(adsArray);
+          currentAdsOnMap = filterTypeField(currentAdsOnMap);
+          beforeFilterApplied = [...currentAdsOnMap];
+          currentAdsOnMap = filterPriceField(currentAdsOnMap);
+          showAdsOnMap(currentAdsOnMap);
+          lastUsedFilter = evt.target.name;
+      }
+    };
+    priceFilter.addEventListener('change', onFilterChange);
   };
 
   const onMapLoaded = () => {
@@ -213,6 +241,8 @@ const handleMap = () => {
       currentAdsOnMap = [...adsArray];
       setTypeFilter(adsArray);
       setRoomFilter(adsArray);
+      setPriceFilter(adsArray);
+
     },
     () => showMapAlert('Не удалось загрузить объявления с сервера'),
     );
