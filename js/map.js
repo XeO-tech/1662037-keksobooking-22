@@ -73,10 +73,12 @@ const showAdsOnMap = (adsArray) => {
 const handleMap = () => {
 
   const ALERT_SHOW_TIME = 5000;
-  const RERENDER_DELAY = 500
+  const RERENDER_DELAY = 500;
+  const HIGH_PRICE_VALUE = 50000;
+  const MIDDLE_PRICE_VALUE = 10000;
 
   const typeFilter = document.querySelector('#housing-type');
-  const roomFilter = document.querySelector('#housing-rooms');
+  const roomsFilter = document.querySelector('#housing-rooms');
   const priceFilter = document.querySelector('#housing-price');
   const guestFilter = document.querySelector('#housing-guests');
   const featuresList = document.querySelector('#housing-features');
@@ -86,7 +88,6 @@ const handleMap = () => {
   const washerFilter = featuresList.querySelector('input[value=\'washer\']');
   const elevatorFilter = featuresList.querySelector('input[value=\'elevator\']');
   const conditionerFilter = featuresList.querySelector('input[value=\'conditioner\']');
-
 
   let lastUsedFilter = '';
   let currentAdsOnMap = [];
@@ -122,7 +123,7 @@ const handleMap = () => {
     }, ALERT_SHOW_TIME);
   };
 
-  const filterSimpleField = (array, filterName, filterField) => {
+  const filterSimpleTextField = (array, filterName, filterField) => {
     if (filterField.value === 'any') {
       return array;
     }
@@ -137,12 +138,12 @@ const handleMap = () => {
     }
     return array.filter((element) => {
       switch (filterField.value) {
-        case ('high'):
-          return element.offer[filterName] >= 50000;
-        case ('middle'):
-          return (element.offer[filterName] >= 10000 && element.offer.price < 50000);
-        case ('low'):
-          return element.offer[filterName] < 10000;
+        case 'high':
+          return element.offer[filterName] >= HIGH_PRICE_VALUE;
+        case 'middle':
+          return (element.offer[filterName] >= MIDDLE_PRICE_VALUE && element.offer.price < HIGH_PRICE_VALUE);
+        case 'low':
+          return element.offer[filterName] < MIDDLE_PRICE_VALUE ;
       }
     })
   };
@@ -154,22 +155,22 @@ const handleMap = () => {
     return array.filter((element) => element.offer.features.includes(filterName))
   };
 
-  const filtersDescription = {
+  const filtersProperties = {
     type: {
       filterField: typeFilter,
-      filterFunction: filterSimpleField,
+      filterFunction: filterSimpleTextField,
     },
     price: {
       filterField: priceFilter,
       filterFunction: filterPriceField,
     },
     rooms: {
-      filterField: roomFilter,
-      filterFunction: filterSimpleField,
+      filterField: roomsFilter,
+      filterFunction: filterSimpleTextField,
     },
     guests: {
       filterField: guestFilter,
-      filterFunction: filterSimpleField,
+      filterFunction: filterSimpleTextField,
     },
     wifi: {
       filterField: wifiFilter,
@@ -198,8 +199,8 @@ const handleMap = () => {
   };
 
   const setupFilterHandler = (adsArray, filterName) => {
-    const filterField = filtersDescription[filterName].filterField;
-    const filterFunction = filtersDescription[filterName].filterFunction;
+    const filterField = filtersProperties[filterName].filterField;
+    const filterFunction = filtersProperties[filterName].filterFunction;
 
     let isUsedBefore = false;
     let beforeFilterApplied = [];
@@ -222,9 +223,9 @@ const handleMap = () => {
         // Если фильтр ранее БЫЛ использован, но предыдущий использованный фильтр НЕ ОН же, то нужно последовательно применить другие активные фильтры, сохранить получившийся массив в beforeFilterApplied для использования в вышеописанном случае, после чего применить текущий фильтр последним
         case (isUsedBefore && lastUsedFilter !== filterName):
           currentAdsOnMap = [...adsArray]
-          Object.keys(filtersDescription)
+          Object.keys(filtersProperties)
             .filter((element) => element !== filterName)
-            .forEach((element) => currentAdsOnMap = filtersDescription[element].filterFunction(currentAdsOnMap, element, filtersDescription[element].filterField));
+            .forEach((element) => currentAdsOnMap = filtersProperties[element].filterFunction(currentAdsOnMap, element, filtersProperties[element].filterField));
           beforeFilterApplied = [...currentAdsOnMap];
           currentAdsOnMap = filterFunction(currentAdsOnMap, filterName, filterField);
           showAdsOnMap(currentAdsOnMap);
@@ -237,11 +238,11 @@ const handleMap = () => {
   const onMapLoaded = () => {
     changeFormStatus('form_fields_enabled');
     getMapData((adsArray) => {
+      downloadedAds = currentAdsOnMap = [...adsArray];
       showAdsOnMap(adsArray);
       changeFormStatus('filters_enabled');
-      downloadedAds = currentAdsOnMap = [...adsArray];
 
-      for (let filterName in filtersDescription) {
+      for (let filterName in filtersProperties) {
         setupFilterHandler(adsArray, filterName)
       }
     },
@@ -261,8 +262,6 @@ const setDefaultMarkerPosition = () => {
   addressField.value = `${DEFAULT_LAT}, ${DEFAULT_LNG}`;
 };
 
-const resetMapMarks = () => {
-  showAdsOnMap(downloadedAds);
-}
+const resetMapMarks = () => showAdsOnMap(downloadedAds);
 
 export {handleMap, setDefaultMarkerPosition, resetMapMarks};
