@@ -36,7 +36,13 @@ const handleMap = () => {
   const roomFilter = document.querySelector('#housing-rooms');
   const priceFilter = document.querySelector('#housing-price');
   const guestFilter = document.querySelector('#housing-guests');
-
+  const featuresList = document.querySelector('#housing-features');
+  const wifiFilter = featuresList.querySelector('input[value=\'wifi\']');
+  const dishwasherFilter = featuresList.querySelector('input[value=\'dishwasher\']');
+  const parkingFilter = featuresList.querySelector('input[value=\'parking\']');
+  const washerFilter = featuresList.querySelector('input[value=\'washer\']');
+  const elevatorFilter = featuresList.querySelector('input[value=\'elevator\']');
+  const conditionerFilter = featuresList.querySelector('input[value=\'conditioner\']');
 
 
   let lastUsedFilter = '';
@@ -124,6 +130,13 @@ const handleMap = () => {
     })
   };
 
+  const filterFeatures = (array, filterName, filterField) => {
+    if (!filterField.checked) {
+      return array;
+    }
+    return array.filter((element) => element.offer.features.includes(filterName))
+  };
+
   const filtersDescription = {
     type: {
       filterField: typeFilter,
@@ -141,17 +154,40 @@ const handleMap = () => {
       filterField: guestFilter,
       filterFunction: filterSimpleField,
     },
+    wifi: {
+      filterField: wifiFilter,
+      filterFunction: filterFeatures,
+    },
+    dishwasher: {
+      filterField: dishwasherFilter,
+      filterFunction: filterFeatures,
+    },
+    parking: {
+      filterField: parkingFilter,
+      filterFunction: filterFeatures,
+    },
+    washer: {
+      filterField: washerFilter,
+      filterFunction: filterFeatures,
+    },
+    elevator: {
+      filterField: elevatorFilter,
+      filterFunction: filterFeatures,
+    },
+    conditioner: {
+      filterField: conditionerFilter,
+      filterFunction: filterFeatures,
+    },
   };
 
   const setupFilterHandler = (adsArray, filterName) => {
-
     const filterField = filtersDescription[filterName].filterField;
     const filterFunction = filtersDescription[filterName].filterFunction;
 
     let isUsedBefore = false;
     let beforeFilterApplied = [];
 
-    const onFilterChange = (evt) => {
+    const onFilterChange = () => {
       switch (true) {
         // Если фильтр ранее НЕ был использован, то можно обрабатывать текущий отсортированный массив объявлений
         case (!isUsedBefore):
@@ -159,15 +195,15 @@ const handleMap = () => {
           currentAdsOnMap = filterFunction(currentAdsOnMap, filterName, filterField);
           showAdsOnMap(currentAdsOnMap);
           isUsedBefore = true;
-          lastUsedFilter = evt.target.name;
+          lastUsedFilter = filterName;
           break;
         // Если фильтр ранее БЫЛ использован и предыдущий использованный фильтр ОН ЖЕ, то нужно обрабатывать массив объявлений, собранный до первого раза использования данного фильтра в непрырывной последовательности
-        case (isUsedBefore && lastUsedFilter === evt.target.name):
+        case (isUsedBefore && lastUsedFilter === filterName):
           currentAdsOnMap = filterFunction(beforeFilterApplied, filterName, filterField);
           showAdsOnMap(currentAdsOnMap);
           break;
         // Если фильтр ранее БЫЛ использован, но предыдущий использованный фильтр НЕ ОН же, то нужно последовательно применить другие активные фильтры, сохранить получившийся массив в beforeFilterApplied для использования в вышеописанном случае, после чего применить текущий фильтр последним
-        case (isUsedBefore && lastUsedFilter !== evt.target.name):
+        case (isUsedBefore && lastUsedFilter !== filterName):
           currentAdsOnMap = [...adsArray]
           Object.keys(filtersDescription)
             .filter((element) => element !== filterName)
@@ -175,7 +211,7 @@ const handleMap = () => {
           beforeFilterApplied = [...currentAdsOnMap];
           currentAdsOnMap = filterFunction(currentAdsOnMap, filterName, filterField);
           showAdsOnMap(currentAdsOnMap);
-          lastUsedFilter = evt.target.name;
+          lastUsedFilter = filterName;
       }
     };
     filterField.addEventListener('change', onFilterChange);
@@ -186,8 +222,8 @@ const handleMap = () => {
     getMapData((adsArray) => {
       showAdsOnMap(adsArray);
       changeFormStatus('filters_enabled');
-
       currentAdsOnMap = [...adsArray];
+      
       for (let filterName in filtersDescription) {
         setupFilterHandler(adsArray, filterName)
       }
