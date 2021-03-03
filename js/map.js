@@ -1,4 +1,5 @@
 /* global L:readonly */
+/* global _:readonly */
 
 import {fillCard} from './elements-generator.js';
 import {changeFormStatus} from './form.js';
@@ -72,6 +73,7 @@ const showAdsOnMap = (adsArray) => {
 const handleMap = () => {
 
   const ALERT_SHOW_TIME = 5000;
+  const RERENDER_DELAY = 500
 
   const typeFilter = document.querySelector('#housing-type');
   const roomFilter = document.querySelector('#housing-rooms');
@@ -229,7 +231,7 @@ const handleMap = () => {
           lastUsedFilter = filterName;
       }
     };
-    filterField.addEventListener('change', onFilterChange);
+    filterField.addEventListener('change', _.debounce(onFilterChange, RERENDER_DELAY));
   };
 
   const onMapLoaded = () => {
