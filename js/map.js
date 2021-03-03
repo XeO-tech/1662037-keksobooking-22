@@ -99,94 +99,81 @@ const handleMap = () => {
     }, ALERT_SHOW_TIME);
   };
 
-  const filterTypeField = (array) => {
-    if (typeFilter.value === 'any') {
-      return array.slice();
-    }
-    return array.filter((element) => {
-      return element.offer.type === typeFilter.value
-    });
-  };
-
-  const filterRoomField = (array) => {
-    if (roomFilter.value === 'any') {
+  const filterSimpleField = (array, filterName, filterField) => {
+    if (filterField.value === 'any') {
       return array;
     }
     return array.filter((element) => {
-      return element.offer.rooms.toString() === roomFilter.value
+      return element.offer[filterName].toString() === filterField.value
     })
   };
 
-  const filterPriceField = (array) => {
-    if (priceFilter.value === 'any') {
+  const filterPriceField = (array, filterName, filterField) => {
+    if (filterField.value === 'any') {
       return array;
     }
     return array.filter((element) => {
-      switch (priceFilter.value) {
+      switch (filterField.value) {
         case ('high'):
-          return element.offer.price >= 50000;
+          return element.offer[filterName] >= 50000;
         case ('middle'):
-          return (element.offer.price >= 10000 && element.offer.price < 50000);
+          return (element.offer[filterName] >= 10000 && element.offer.price < 50000);
         case ('low'):
-          return element.offer.price < 10000;
+          return element.offer[filterName] < 10000;
       }
     })
-  }
-
-  const filterGuestField = (array) => {
-    if (guestFilter.value === 'any') {
-      return array;
-    }
-    return array.filter((element) => {
-      return element.offer.guests.toString() === guestFilter.value
-    })
   };
-
-  const filterFunctionsList = [filterTypeField, filterRoomField, filterPriceField, filterGuestField];
 
   const filtersDescription = {
     type: {
       filterField: typeFilter,
-      filterFunction: filterTypeField,
+      filterFunction: filterSimpleField,
     },
     price: {
       filterField: priceFilter,
       filterFunction: filterPriceField,
     },
-    room: {
+    rooms: {
       filterField: roomFilter,
-      filterFunction: filterRoomField,
+      filterFunction: filterSimpleField,
     },
     guests: {
       filterField: guestFilter,
-      filterFunction: filterGuestField,
+      filterFunction: filterSimpleField,
     },
   };
 
-  const setupFilterHandler = (adsArray, filterField, filterFunction) => {
+  const setupFilterHandler = (adsArray, filterName) => {
+
+    const filterField = filtersDescription[filterName].filterField;
+    const filterFunction = filtersDescription[filterName].filterFunction;
+
     let isUsedBefore = false;
     let beforeFilterApplied = [];
+
     const onFilterChange = (evt) => {
       switch (true) {
+        // Если фильтр ранее НЕ был использован, то можно обрабатывать текущий отсортированный массив объявлений
         case (!isUsedBefore):
           beforeFilterApplied = [...currentAdsOnMap];
-          currentAdsOnMap = filterFunction(currentAdsOnMap);
+          currentAdsOnMap = filterFunction(currentAdsOnMap, filterName, filterField);
           showAdsOnMap(currentAdsOnMap);
           isUsedBefore = true;
           lastUsedFilter = evt.target.name;
           break;
+        // Если фильтр ранее БЫЛ использован и предыдущий использованный фильтр ОН ЖЕ, то нужно обрабатывать массив объявлений, собранный до первого раза использования данного фильтра в непрырывной последовательности
         case (isUsedBefore && lastUsedFilter === evt.target.name):
-          currentAdsOnMap = [...beforeFilterApplied]
-          currentAdsOnMap = filterFunction(currentAdsOnMap);
+          currentAdsOnMap = filterFunction(beforeFilterApplied, filterName, filterField);
           showAdsOnMap(currentAdsOnMap);
           break;
+        // Если фильтр ранее БЫЛ использован, но предыдущий использованный фильтр НЕ ОН же, то нужно последовательно применить другие активные фильтры, сохранить получившийся массив в beforeFilterApplied для использования в вышеописанном случае, после чего применить текущий фильтр последним
         case (isUsedBefore && lastUsedFilter !== evt.target.name):
           currentAdsOnMap = [...adsArray]
-          filterFunctionsList
-            .filter((element) => element !== filterFunction)
-            .forEach((element) => currentAdsOnMap = element(currentAdsOnMap));
+          Object.keys(filtersDescription)
+            .filter((element) => element !== filterName)
+            .forEach((element) => currentAdsOnMap = filtersDescription[element].filterFunction(currentAdsOnMap, element, filtersDescription[element].filterField));
           beforeFilterApplied = [...currentAdsOnMap];
-          currentAdsOnMap = filterFunction(currentAdsOnMap);
+          currentAdsOnMap = filterFunction(currentAdsOnMap, filterName, filterField);
           showAdsOnMap(currentAdsOnMap);
           lastUsedFilter = evt.target.name;
       }
@@ -201,14 +188,13 @@ const handleMap = () => {
       changeFormStatus('filters_enabled');
 
       currentAdsOnMap = [...adsArray];
-      for (let filter in filtersDescription) {
-        setupFilterHandler(adsArray, filtersDescription[filter].filterField, filtersDescription[filter].filterFunction)
+      for (let filterName in filtersDescription) {
+        setupFilterHandler(adsArray, filterName)
       }
     },
     () => showMapAlert('Не удалось загрузить объявления с сервера'),
     );
   };
-
 
   const map = L.map('map-canvas')
     .setView({
