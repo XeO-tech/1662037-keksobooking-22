@@ -1,4 +1,4 @@
-import {setDefaultMarkerPosition} from './map.js';
+import {setDefaultMarkerPosition, resetMapMarks} from './map.js';
 import {sendFormData} from './api.js';
 import {isEscEvent} from './util.js'
 
@@ -102,6 +102,7 @@ const handleForm = () => {
       setDefaultMarkerPosition();
       setPlaceMinPrice();
       mapFilters.reset();
+      resetMapMarks();
     }, FORM_RESET_DELAY);
   });
 }

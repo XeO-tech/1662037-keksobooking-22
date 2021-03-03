@@ -6,9 +6,25 @@ import {getMapData} from './api.js';
 
 const DEFAULT_LAT = 35.68251;
 const DEFAULT_LNG = 139.75121;
+const MAX_ADS_ON_MAP = 10;
 
 const addressField = document.querySelector('#address');
 const adsMarkersLayer = L.layerGroup();
+
+let downloadedAds = [];
+
+const map = L.map('map-canvas')
+  .setView({
+    lat: DEFAULT_LAT,
+    lng: DEFAULT_LNG,
+  }, 9);
+
+L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  },
+).addTo(map);
 
 const pinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
@@ -27,10 +43,35 @@ const mainMarker = L.marker(
   },
 );
 
+const showAdsOnMap = (adsArray) => {
+  const adsIcon = L.icon({
+    iconUrl: './img/pin.svg',
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+  });
+
+  if (adsMarkersLayer.getLayers().length > 0) {
+    adsMarkersLayer.clearLayers();
+  }
+
+  adsArray.slice(0, MAX_ADS_ON_MAP).forEach((element) => {
+    L.marker({
+      lat: element.location.lat,
+      lng: element.location.lng,
+    },
+    {
+      icon: adsIcon,
+    })
+      .addTo(adsMarkersLayer)
+      .bindPopup(fillCard(element));
+  });
+
+  adsMarkersLayer.addTo(map);
+};
+
 const handleMap = () => {
 
   const ALERT_SHOW_TIME = 5000;
-  const MAX_ADS_ON_MAP = 10;
 
   const typeFilter = document.querySelector('#housing-type');
   const roomFilter = document.querySelector('#housing-rooms');
@@ -56,32 +97,6 @@ const handleMap = () => {
       const newCoordinates = evt.target.getLatLng();
       addressField.value = `${newCoordinates.lat.toFixed(5)}, ${newCoordinates.lng.toFixed(5)}`
     });
-  };
-
-  const showAdsOnMap = (adsArray) => {
-    const adsIcon = L.icon({
-      iconUrl: './img/pin.svg',
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-    });
-
-    if (adsMarkersLayer.getLayers().length > 0) {
-      adsMarkersLayer.clearLayers();
-    }
-
-    adsArray.slice(0, MAX_ADS_ON_MAP).forEach((element) => {
-      L.marker({
-        lat: element.location.lat,
-        lng: element.location.lng,
-      },
-      {
-        icon: adsIcon,
-      })
-        .addTo(adsMarkersLayer)
-        .bindPopup(fillCard(element));
-    });
-
-    adsMarkersLayer.addTo(map);
   };
 
   const showMapAlert = (message) => {
@@ -222,8 +237,8 @@ const handleMap = () => {
     getMapData((adsArray) => {
       showAdsOnMap(adsArray);
       changeFormStatus('filters_enabled');
-      currentAdsOnMap = [...adsArray];
-      
+      downloadedAds = currentAdsOnMap = [...adsArray];
+
       for (let filterName in filtersDescription) {
         setupFilterHandler(adsArray, filterName)
       }
@@ -231,19 +246,6 @@ const handleMap = () => {
     () => showMapAlert('Не удалось загрузить объявления с сервера'),
     );
   };
-
-  const map = L.map('map-canvas')
-    .setView({
-      lat: DEFAULT_LAT,
-      lng: DEFAULT_LNG,
-    }, 9);
-
-  L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    },
-  ).addTo(map);
 
   mainMarker.addTo(map);
 
@@ -257,4 +259,8 @@ const setDefaultMarkerPosition = () => {
   addressField.value = `${DEFAULT_LAT}, ${DEFAULT_LNG}`;
 };
 
-export {handleMap, setDefaultMarkerPosition};
+const resetMapMarks = () => {
+  showAdsOnMap(downloadedAds);
+}
+
+export {handleMap, setDefaultMarkerPosition, resetMapMarks};
