@@ -82,12 +82,12 @@ const handleMap = () => {
   const priceFilter = document.querySelector('#housing-price');
   const guestFilter = document.querySelector('#housing-guests');
   const featuresList = document.querySelector('#housing-features');
-  const wifiFilter = featuresList.querySelector('input[value=\'wifi\']');
-  const dishwasherFilter = featuresList.querySelector('input[value=\'dishwasher\']');
-  const parkingFilter = featuresList.querySelector('input[value=\'parking\']');
-  const washerFilter = featuresList.querySelector('input[value=\'washer\']');
-  const elevatorFilter = featuresList.querySelector('input[value=\'elevator\']');
-  const conditionerFilter = featuresList.querySelector('input[value=\'conditioner\']');
+  const wifiFilter = featuresList.querySelector('input[value=wifi ]');
+  const dishwasherFilter = featuresList.querySelector('input[value=dishwasher]');
+  const parkingFilter = featuresList.querySelector('input[value=parking]');
+  const washerFilter = featuresList.querySelector('input[value=washer]');
+  const elevatorFilter = featuresList.querySelector('input[value=elevator]');
+  const conditionerFilter = featuresList.querySelector('input[value=conditioner]');
 
   let lastUsedFilter = '';
   let currentAdsOnMap = [];
