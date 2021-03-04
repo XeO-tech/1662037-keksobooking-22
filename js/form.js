@@ -1,6 +1,7 @@
 import {setDefaultMarkerPosition, resetMapMarks} from './map.js';
 import {sendFormData} from './api.js';
-import {isEscEvent} from './util.js'
+import {isEscEvent} from './util.js';
+import {setupAllPicturesUploaders} from './picture-uploader.js';
 
 const adForm = document.querySelector('.ad-form');
 const nightPriceField = adForm.querySelector('#price');
@@ -210,6 +211,8 @@ const setupFormValidity = () => {
   roomNumberField.addEventListener('change', onRoomNumberChange);
 
   nightPriceField.max = MAX_PRICE;
+
+  setupAllPicturesUploaders();
 }
 
 export {handleForm, changeFormStatus, setupFormValidity}
