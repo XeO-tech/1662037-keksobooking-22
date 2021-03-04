@@ -16,7 +16,6 @@ const setupAllPicturesUploaders = () => {
       const match = () => FILE_TYPES.some((it) => pictureName.endsWith(it));
 
       const scalePicture = (picture) => {
-        console.log(picture.style.aspe)
         const originalWidth = picture.width;
         const originalHeight = picture.height;
 
@@ -60,4 +59,4 @@ const setupAllPicturesUploaders = () => {
   setupPictureUploader(housePictureChooser, housePictureContainer, 'Фото жилья');
 };
 
-export {setupAllPicturesUploaders}
+export {setupAllPicturesUploaders};
