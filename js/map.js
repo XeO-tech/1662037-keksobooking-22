@@ -7,6 +7,7 @@ import {getMapData} from './api.js';
 
 const DEFAULT_LAT = 35.68251;
 const DEFAULT_LNG = 139.75121;
+const DEFAULT_MAP_SCALE = 9;
 const MAX_ADS_ON_MAP = 10;
 
 const addressField = document.querySelector('#address');
@@ -18,7 +19,7 @@ const map = L.map('map-canvas')
   .setView({
     lat: DEFAULT_LAT,
     lng: DEFAULT_LNG,
-  }, 9);
+  }, DEFAULT_MAP_SCALE);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
