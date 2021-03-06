@@ -15,18 +15,7 @@ const adsMarkersLayer = L.layerGroup();
 
 let downloadedAds = [];
 
-const map = L.map('map-canvas')
-  .setView({
-    lat: DEFAULT_LAT,
-    lng: DEFAULT_LNG,
-  }, DEFAULT_MAP_SCALE);
-
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
+const map = L.map('map-canvas');
 
 const pinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
@@ -122,7 +111,19 @@ const handleMap = () => {
 
   setupAddressByMarkerOnly();
 
-  map.on('load', onMapLoaded());
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+  ).addTo(map);
+
+  map
+    .on('load', onMapLoaded)
+    .setView({
+      lat: DEFAULT_LAT,
+      lng: DEFAULT_LNG,
+    }, DEFAULT_MAP_SCALE);
 };
 
 const setDefaultMarkerPosition = () => {
