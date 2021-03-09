@@ -3,12 +3,19 @@
 import {fillCard} from './elements-generator.js';
 import {changeFormStatus} from './form.js';
 import {getMapData} from './api.js';
+import {setupFilterHandler} from './filters.js';
 
 const DEFAULT_LAT = 35.68251;
 const DEFAULT_LNG = 139.75121;
+const DEFAULT_MAP_SCALE = 9;
+const MAX_ADS_ON_MAP = 10;
 
 const addressField = document.querySelector('#address');
 const adsMarkersLayer = L.layerGroup();
+
+let downloadedAds = [];
+
+const map = L.map('map-canvas');
 
 const pinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
@@ -27,12 +34,35 @@ const mainMarker = L.marker(
   },
 );
 
+const showAds = (adsArray) => {
+  const adsIcon = L.icon({
+    iconUrl: './img/pin.svg',
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+  });
+
+  if (adsMarkersLayer.getLayers().length > 0) {
+    adsMarkersLayer.clearLayers();
+  }
+
+  adsArray.slice(0, MAX_ADS_ON_MAP).forEach((element) => {
+    L.marker({
+      lat: element.location.lat,
+      lng: element.location.lng,
+    },
+    {
+      icon: adsIcon,
+    })
+      .addTo(adsMarkersLayer)
+      .bindPopup(fillCard(element));
+  });
+
+  adsMarkersLayer.addTo(map);
+};
+
 const handleMap = () => {
 
   const ALERT_SHOW_TIME = 5000;
-  const MAX_ADS_ON_MAP = 10;
-
-  const typeFilter = document.querySelector('#housing-type')
 
   const setupAddressByMarkerOnly = () => {
     addressField.readOnly = true;
@@ -42,32 +72,6 @@ const handleMap = () => {
       const newCoordinates = evt.target.getLatLng();
       addressField.value = `${newCoordinates.lat.toFixed(5)}, ${newCoordinates.lng.toFixed(5)}`
     });
-  };
-
-  const showAdsOnMap = (adsArray) => {
-    const adsIcon = L.icon({
-      iconUrl: './img/pin.svg',
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-    });
-
-    if (adsMarkersLayer.getLayers().length > 0) {
-      adsMarkersLayer.clearLayers();
-    }
-
-    adsArray.slice(0, MAX_ADS_ON_MAP).forEach((element) => {
-      L.marker({
-        lat: element.location.lat,
-        lng: element.location.lng,
-      },
-      {
-        icon: adsIcon,
-      })
-        .addTo(adsMarkersLayer)
-        .bindPopup(fillCard(element));
-    });
-
-    adsMarkersLayer.addTo(map);
   };
 
   const showMapAlert = (message) => {
@@ -91,35 +95,21 @@ const handleMap = () => {
     }, ALERT_SHOW_TIME);
   };
 
-  const setTypeFilter = (adsArray) => {
-    typeFilter.addEventListener('change', (evt) => {
-      if (evt.target.value !== 'any') {
-        showAdsOnMap(adsArray
-          .filter((element) => element.offer.type === evt.target.value));
-      } else {
-        showAdsOnMap(adsArray);
-      }
-    })
-  };
-
   const onMapLoaded = () => {
     changeFormStatus('form_fields_enabled');
     getMapData((adsArray) => {
-      showAdsOnMap(adsArray);
+      downloadedAds = [...adsArray];
+      showAds(adsArray);
       changeFormStatus('filters_enabled');
-
-      setTypeFilter(adsArray);
+      setupFilterHandler(adsArray);
     },
     () => showMapAlert('Не удалось загрузить объявления с сервера'),
     );
   };
 
+  mainMarker.addTo(map);
 
-  const map = L.map('map-canvas')
-    .setView({
-      lat: DEFAULT_LAT,
-      lng: DEFAULT_LNG,
-    }, 9);
+  setupAddressByMarkerOnly();
 
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -128,11 +118,12 @@ const handleMap = () => {
     },
   ).addTo(map);
 
-  mainMarker.addTo(map);
-
-  setupAddressByMarkerOnly();
-
-  map.on('load', onMapLoaded());
+  map
+    .on('load', onMapLoaded)
+    .setView({
+      lat: DEFAULT_LAT,
+      lng: DEFAULT_LNG,
+    }, DEFAULT_MAP_SCALE);
 };
 
 const setDefaultMarkerPosition = () => {
@@ -140,4 +131,6 @@ const setDefaultMarkerPosition = () => {
   addressField.value = `${DEFAULT_LAT}, ${DEFAULT_LNG}`;
 };
 
-export {handleMap, setDefaultMarkerPosition};
+const resetMapMarks = () => showAds(downloadedAds);
+
+export {handleMap, setDefaultMarkerPosition, resetMapMarks, showAds};

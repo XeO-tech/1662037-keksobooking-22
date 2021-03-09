@@ -1,6 +1,6 @@
-import {setDefaultMarkerPosition} from './map.js';
+import {setDefaultMarkerPosition, resetMapMarks} from './map.js';
 import {sendFormData} from './api.js';
-import {isEscEvent} from './util.js'
+import {isEscEvent} from './util.js';
 
 const adForm = document.querySelector('.ad-form');
 const nightPriceField = adForm.querySelector('#price');
@@ -102,6 +102,7 @@ const handleForm = () => {
       setDefaultMarkerPosition();
       setPlaceMinPrice();
       mapFilters.reset();
+      resetMapMarks();
     }, FORM_RESET_DELAY);
   });
 }
