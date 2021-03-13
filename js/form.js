@@ -2,7 +2,7 @@ import {setDefaultMarkerPosition, resetMapMarks} from './map.js';
 import {sendFormData} from './api.js';
 import {isEscEvent} from './util.js';
 import {setupAllPicturesUploaders} from './picture-uploader.js';
-
+ 
 const adForm = document.querySelector('.ad-form');
 const nightPriceField = adForm.querySelector('#price');
 const mapFilters = document.querySelector('.map__filters');
