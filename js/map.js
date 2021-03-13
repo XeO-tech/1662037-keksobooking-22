@@ -52,7 +52,7 @@ const showAds = (adsArray) => {
   });
   adsMarkersLayer.addTo(map);
 };
-const handleMap = () => {
+const setupMap = () => {
   const ALERT_SHOW_TIME = 5000;
 
   const setupAddressByMarkerOnly = () => {
@@ -116,4 +116,4 @@ const setDefaultMarkerPosition = () => {
 };
 const resetMapMarks = () => showAds(downloadedAds);
 
-export {handleMap, setDefaultMarkerPosition, resetMapMarks, showAds};
+export {setupMap, setDefaultMarkerPosition, resetMapMarks, showAds};

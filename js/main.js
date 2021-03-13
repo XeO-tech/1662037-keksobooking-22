@@ -1,7 +1,7 @@
-import {handleMap} from './map.js';
-import {handleForm, changeFormStatus, setupFormValidity} from './form.js';
+import {setupMap} from './map.js';
+import {setupForm, changeFormStatus, setupFormValidity} from './form.js';
 
 changeFormStatus('disabled');
-handleMap();
-handleForm();
+setupMap();
+setupForm();
 setupFormValidity();

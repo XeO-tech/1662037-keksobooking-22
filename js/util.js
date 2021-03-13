@@ -1,4 +1,3 @@
-const getIntFromRange = (min, max) => getFloatFromRange(min, max);
 
 const getFloatFromRange = (min, max, decimal) => {
   if (min < 0 || max < 0) {
@@ -12,4 +11,4 @@ const getFloatFromRange = (min, max, decimal) => {
 const isEscEvent = (evt) => {
   return evt.key === ('Escape' || 'Esc');
 };
-export {getIntFromRange, getFloatFromRange, isEscEvent};
+export {getFloatFromRange, isEscEvent};

@@ -7,7 +7,7 @@ const adForm = document.querySelector('.ad-form');
 const nightPriceField = adForm.querySelector('#price');
 const mapFilters = document.querySelector('.map__filters');
 
-const handleForm = () => {
+const setupForm = () => {
   const placeTypeField = adForm.querySelector('#type');
   const checkInField = adForm.querySelector('#timein');
   const checkOutField = adForm.querySelector('#timeout');
@@ -184,4 +184,4 @@ const setupFormValidity = () => {
   nightPriceField.max = MAX_PRICE;
   setupAllPicturesUploaders();
 };
-export {handleForm, changeFormStatus, setupFormValidity};
+export {setupForm, changeFormStatus, setupFormValidity};
