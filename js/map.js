@@ -1,7 +1,7 @@
 /* global L:readonly */
 /* global _:readonly */
 
-import {fillCard} from './elements-generator.js';
+import {renderBaloon} from './baloon-renderer.js';
 import {changeFormStatus} from './form.js';
 import {getMapData} from './api.js';
 
@@ -12,7 +12,6 @@ const MAX_ADS_ON_MAP = 10;
 
 const addressField = document.querySelector('#address');
 const adsMarkersLayer = L.layerGroup();
-
 let downloadedAds = [];
 
 const map = L.map('map-canvas')
@@ -20,7 +19,6 @@ const map = L.map('map-canvas')
     lat: DEFAULT_LAT,
     lng: DEFAULT_LNG,
   }, DEFAULT_MAP_SCALE);
-
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
@@ -65,14 +63,12 @@ const showAdsOnMap = (adsArray) => {
       icon: adsIcon,
     })
       .addTo(adsMarkersLayer)
-      .bindPopup(fillCard(element));
+      .bindPopup(renderBaloon(element));
   });
-
   adsMarkersLayer.addTo(map);
 };
 
 const handleMap = () => {
-
   const ALERT_SHOW_TIME = 5000;
   const RERENDER_DELAY = 500;
   const HIGH_PRICE_VALUE = 50000;
@@ -115,7 +111,6 @@ const handleMap = () => {
     alertContainer.textContent = message;
 
     document.querySelector('#map-canvas').append(alertContainer);
-
     setTimeout(() => {
       alertContainer.remove();
     }, ALERT_SHOW_TIME);
@@ -127,7 +122,7 @@ const handleMap = () => {
     }
     return array.filter((element) => {
       return element.offer[filterName].toString() === filterField.value
-    })
+    });
   };
 
   const filterPriceField = (array, filterName, filterField) => {
@@ -141,9 +136,9 @@ const handleMap = () => {
         case 'middle':
           return (element.offer[filterName] >= MIDDLE_PRICE_VALUE && element.offer.price < HIGH_PRICE_VALUE);
         case 'low':
-          return element.offer[filterName] < MIDDLE_PRICE_VALUE ;
+          return element.offer[filterName] < MIDDLE_PRICE_VALUE;
       }
-    })
+    });
   };
 
   const filterFeatures = (array, filterName, filterField) => {
@@ -224,9 +219,7 @@ const handleMap = () => {
   };
 
   mainMarker.addTo(map);
-
   setupAddressByMarkerOnly();
-
   map.on('load', onMapLoaded());
 };
 

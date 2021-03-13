@@ -1,4 +1,4 @@
-const fillCard = (data) => {
+const renderBaloon = (data) => {
   const cardTemplate = document.querySelector('#card').content;
   const cardTemplateItem = cardTemplate.querySelector('.popup');
   const card = cardTemplateItem.cloneNode(true);
@@ -72,5 +72,5 @@ const fillCard = (data) => {
   return card;
 };
 
-export {fillCard};
+export {renderBaloon};
 

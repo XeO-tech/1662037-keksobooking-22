@@ -23,4 +23,4 @@ const sendFormData = (onSuccess, onFail, body) => {
     .catch(() => onFail());
 };
 
-export {getMapData, sendFormData}
+export {getMapData, sendFormData};

@@ -62,7 +62,6 @@ const handleForm = () => {
     const successTemplate = document.querySelector('#success').content;
     const successMessage = successTemplate.querySelector('.success').cloneNode(true);
     document.querySelector('main').appendChild(successMessage);
-
     document.addEventListener('keydown', onFormMessageEscKeydown, { once: true });
     document.addEventListener('click', onFormMessageClick, { once: true });
   };
@@ -71,22 +70,18 @@ const handleForm = () => {
     const errorTemplate = document.querySelector('#error').content;
     const errorMessage = errorTemplate.querySelector('.error').cloneNode(true);
     document.querySelector('main').appendChild(errorMessage);
-
     document.addEventListener('keydown', onFormMessageEscKeydown, { once: true });
     document.addEventListener('click', onFormMessageClick, { once: true });
   };
 
   // Handling form fields
   setPlaceMinPrice();
-
   [checkInField, checkOutField].forEach((element) => element.addEventListener('change', onCheckInOut));
-
   placeTypeField.addEventListener('change', onPlaceTypeChanged);
 
   // Handling submitting
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-
     sendFormData(
       () => {
         showSuccessMessage();
@@ -121,12 +116,10 @@ const changeFormStatus = (status) => {
         element.disabled = true;
       }
       break;
-
     case 'form_fields_enabled':
       adForm.classList.remove('ad-form--disabled');
       adFormElements.forEach((element) => element.disabled = false);
       break;
-
     case 'filters_enabled':
       mapFilters.classList.remove('map__filters--disabled');
       for (let element of mapFiltersElements) {
@@ -134,10 +127,9 @@ const changeFormStatus = (status) => {
       }
       break;
   }
-}
+};
 
 const setupFormValidity = () => {
-
   const adTitleField = adForm.querySelector('#title');
   const roomNumberField = adForm.querySelector('#room_number');
   const guestsNumberField = adForm.querySelector('#capacity');
@@ -147,7 +139,6 @@ const setupFormValidity = () => {
   const MAX_PRICE = 1000000;
 
   const changeRoomNumber = () => {
-
     const guestsFor1RoomOption = guestsNumberField.querySelector('option[value=\'1\']');
     const guestsFor100RoomsOption = guestsNumberField.querySelector('option[value=\'0\']');
 
@@ -177,7 +168,6 @@ const setupFormValidity = () => {
   const onRoomNumberChange = () => changeRoomNumber();
 
   adTitleField.addEventListener('input', () => {
-
     const valueLength = adTitleField.value.length;
 
     const defineWordEnding = (number, word) => {
@@ -191,28 +181,22 @@ const setupFormValidity = () => {
         default:
           return word + 'ов';
       }
-    }
+    };
 
     if (valueLength < MIN_TITLE_LENGTH) {
       adTitleField.setCustomValidity(`Еще ${MIN_TITLE_LENGTH - valueLength} ${defineWordEnding(MIN_TITLE_LENGTH - valueLength, 'символ')}`);
-
     } else if (valueLength > MAX_TITLE_LENGTH) {
       adTitleField.setCustomValidity(`Удалите ${valueLength - MAX_TITLE_LENGTH} ${defineWordEnding(valueLength - MAX_TITLE_LENGTH, 'символ')}`);
-
     } else {
       adTitleField.setCustomValidity('');
     }
-
     adTitleField.reportValidity();
   });
 
   changeRoomNumber();
-
   roomNumberField.addEventListener('change', onRoomNumberChange);
-
   nightPriceField.max = MAX_PRICE;
-
   setupAllPicturesUploaders();
 }
 
-export {handleForm, changeFormStatus, setupFormValidity}
+export {handleForm, changeFormStatus, setupFormValidity};
