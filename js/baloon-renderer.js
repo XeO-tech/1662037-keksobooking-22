@@ -6,33 +6,25 @@ const renderBaloon = (data) => {
   const photo = photos.querySelector('.popup__photo');
   const featuresList = card.querySelector('.popup__features');
 
-  const evaluateType = () => {
-    switch (data.offer.type) {
-      case 'flat':
-        return 'Квартира';
-      case 'bungalow':
-        return 'Бунгало';
-      case 'house':
-        return 'Дом';
-      case 'palace':
-        return 'Дворец';
-      default:
-        return '';
-    }
+  const houseTypeAliases ={
+    'flat': 'Квартира',
+    'bungalow': 'Бунгало',
+    'house': 'Дом',
+    'palace': 'Дворец',
   };
-  const textDataAlias = {
+  const textDataAliases = {
     'popup__text--address': data.offer.address,
     'popup__title': data.offer.title,
-    'popup__type': evaluateType(),
+    'popup__type': houseTypeAliases[data.offer.type],
     'popup__description': data.offer.description,
     'popup__text--price': (data.offer.price !== '') ? data.offer.price + ' ₽/ночь' : '',
     'popup__text--time': (data.offer.checkin !== '' && data.offer.checkout !== '') ? `Заезд после ${data.offer.checkin}, выезд до ${data.offer.checkout}.` : '',
     'popup__text--capacity': (data.offer.rooms!== '' && data.offer.guests !== '') ? `${data.offer.rooms} комнаты для ${data.offer.guests} гостей.` : '',
   };
   // Showing simple text data
-  for (let key in textDataAlias) {
-    if (textDataAlias[key] !== '') {
-      card.querySelector('.' + key).innerText = textDataAlias[key];
+  for (let key in textDataAliases) {
+    if (textDataAliases[key] !== '') {
+      card.querySelector('.' + key).innerText = textDataAliases[key];
     } else {
       card.querySelector('.' + key).style.display = 'none';
     }
