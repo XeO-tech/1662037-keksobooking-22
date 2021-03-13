@@ -20,7 +20,6 @@ const renderBaloon = (data) => {
         return '';
     }
   };
-
   const textDataAlias = {
     'popup__text--address': data.offer.address,
     'popup__title': data.offer.title,
@@ -30,7 +29,6 @@ const renderBaloon = (data) => {
     'popup__text--time': (data.offer.checkin !== '' && data.offer.checkout !== '') ? `Заезд после ${data.offer.checkin}, выезд до ${data.offer.checkout}.` : '',
     'popup__text--capacity': (data.offer.rooms!== '' && data.offer.guests !== '') ? `${data.offer.rooms} комнаты для ${data.offer.guests} гостей.` : '',
   };
-
   // Showing simple text data
   for (let key in textDataAlias) {
     if (textDataAlias[key] !== '') {
@@ -39,7 +37,6 @@ const renderBaloon = (data) => {
       card.querySelector('.' + key).style.display = 'none';
     }
   }
-
   // Displaying photos
   const photosFragment = document.createDocumentFragment()
   for (let i = 0; i < data.offer.photos.length; i++) {
@@ -52,7 +49,6 @@ const renderBaloon = (data) => {
   if (photos.children.length === 0) {
     photos.style.display = 'none';
   }
-
   // Displaying features icons
   featuresList.innerHTML = '';
   const featuresFragment = document.createDocumentFragment()
@@ -65,12 +61,10 @@ const renderBaloon = (data) => {
   if (featuresList.children.length === 0) {
     featuresList.style.display = 'none';
   }
-
   // Displaying avatar
   card.querySelector('.popup__avatar').src = data.author.avatar;
 
   return card;
 };
-
 export {renderBaloon};
 

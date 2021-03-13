@@ -22,7 +22,6 @@ const scalePicture = (picture) => {
     picture.height = newHeight;
   }
 };
-
 const setupAllPicturesUploaders = () => {
   const avatarContainer = document.querySelector('.ad-form-header__preview');
   const avatarChooser = document.querySelector('.ad-form-header__input');
@@ -51,7 +50,6 @@ const setupAllPicturesUploaders = () => {
           pictureContainer.appendChild(picturePreview);
         });
         reader.readAsDataURL(picture);
-
       } else {
         alert('Некорректный формат изображения. Попробуйте использовать картинку с расширением .jpg, .jpeg или .png.');
       }
@@ -61,5 +59,4 @@ const setupAllPicturesUploaders = () => {
   setupPictureUploader(avatarChooser, avatarContainer, 'Аватар пользователя');
   setupPictureUploader(housePictureChooser, housePictureContainer, 'Фото жилья');
 };
-
 export {setupAllPicturesUploaders};

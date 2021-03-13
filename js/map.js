@@ -30,7 +30,6 @@ const mainMarker = L.marker(
     icon: pinIcon,
   },
 );
-
 const showAds = (adsArray) => {
   const adsIcon = L.icon({
     iconUrl: './img/pin.svg',
@@ -53,7 +52,6 @@ const showAds = (adsArray) => {
   });
   adsMarkersLayer.addTo(map);
 };
-
 const handleMap = () => {
   const ALERT_SHOW_TIME = 5000;
 
@@ -66,7 +64,6 @@ const handleMap = () => {
       addressField.value = `${newCoordinates.lat.toFixed(5)}, ${newCoordinates.lng.toFixed(5)}`
     });
   };
-
   const showMapAlert = (message) => {
     const alertContainer = document.createElement('div');
     alertContainer.style.zIndex = 1000;
@@ -86,7 +83,6 @@ const handleMap = () => {
       alertContainer.remove();
     }, ALERT_SHOW_TIME);
   };
-
   const onMapLoaded = () => {
     changeFormStatus('form_fields_enabled');
     getMapData((adsArray) => {
@@ -98,10 +94,8 @@ const handleMap = () => {
     () => showMapAlert('Не удалось загрузить объявления с сервера'),
     );
   };
-
   mainMarker.addTo(map);
   setupAddressByMarkerOnly();
-
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {
@@ -116,12 +110,10 @@ const handleMap = () => {
       lng: DEFAULT_LNG,
     }, DEFAULT_MAP_SCALE);
 };
-
 const setDefaultMarkerPosition = () => {
   mainMarker.setLatLng([DEFAULT_LAT, DEFAULT_LNG]);
   addressField.value = `${DEFAULT_LAT}, ${DEFAULT_LNG}`;
 };
-
 const resetMapMarks = () => showAds(downloadedAds);
 
 export {handleMap, setDefaultMarkerPosition, resetMapMarks, showAds};

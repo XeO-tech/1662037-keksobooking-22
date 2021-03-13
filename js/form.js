@@ -2,7 +2,7 @@ import {setDefaultMarkerPosition, resetMapMarks} from './map.js';
 import {sendFormData} from './api.js';
 import {isEscEvent} from './util.js';
 import {setupAllPicturesUploaders} from './picture-uploader.js';
- 
+
 const adForm = document.querySelector('.ad-form');
 const nightPriceField = adForm.querySelector('#price');
 const mapFilters = document.querySelector('.map__filters');
@@ -23,7 +23,6 @@ const handleForm = () => {
   const onCheckInOut = (evt) => {
     (evt.target === checkInField) ? checkOutField.value = evt.target.value : checkInField.value = evt.target.value;
   };
-
   const setPlaceMinPrice = () => {
     let minPrice = 0;
     switch (placeTypeField.value) {
@@ -42,7 +41,6 @@ const handleForm = () => {
     }
     nightPriceField.min = nightPriceField.placeholder = minPrice;
   };
-
   const onPlaceTypeChanged = () => setPlaceMinPrice();
 
   const onFormMessageEscKeydown = (evt) => {
@@ -52,12 +50,10 @@ const handleForm = () => {
       document.removeEventListener('click', onFormMessageClick, { once: true });
     }
   };
-
   const onFormMessageClick = () => {
     document.querySelector('main').lastChild.remove();
     document.removeEventListener('keydown', onFormMessageEscKeydown, { once: true });
   };
-
   const showSuccessMessage = () => {
     const successTemplate = document.querySelector('#success').content;
     const successMessage = successTemplate.querySelector('.success').cloneNode(true);
@@ -65,7 +61,6 @@ const handleForm = () => {
     document.addEventListener('keydown', onFormMessageEscKeydown, { once: true });
     document.addEventListener('click', onFormMessageClick, { once: true });
   };
-
   const showErrorMessage = () => {
     const errorTemplate = document.querySelector('#error').content;
     const errorMessage = errorTemplate.querySelector('.error').cloneNode(true);
@@ -73,12 +68,10 @@ const handleForm = () => {
     document.addEventListener('keydown', onFormMessageEscKeydown, { once: true });
     document.addEventListener('click', onFormMessageClick, { once: true });
   };
-
   // Handling form fields
   setPlaceMinPrice();
   [checkInField, checkOutField].forEach((element) => element.addEventListener('change', onCheckInOut));
   placeTypeField.addEventListener('change', onPlaceTypeChanged);
-
   // Handling submitting
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -91,7 +84,6 @@ const handleForm = () => {
       new FormData(evt.target),
     );
   });
-
   // Handling reset
   adForm.addEventListener('reset', () => {
     setTimeout(() => {
@@ -101,8 +93,7 @@ const handleForm = () => {
       resetMapMarks();
     }, FORM_RESET_DELAY);
   });
-}
-
+};
 const changeFormStatus = (status) => {
   const adFormElements = adForm.querySelectorAll('.ad-form__element');
   const mapFiltersElements = mapFilters.children;
@@ -128,7 +119,6 @@ const changeFormStatus = (status) => {
       break;
   }
 };
-
 const setupFormValidity = () => {
   const adTitleField = adForm.querySelector('#title');
   const roomNumberField = adForm.querySelector('#room_number');
@@ -146,7 +136,6 @@ const setupFormValidity = () => {
       element.disabled = true;
       element.selected = false;
     }
-
     switch (roomNumberField.value) {
       case '3':
         guestsNumberField.querySelector('option[value=\'3\']').disabled = false;
@@ -164,7 +153,6 @@ const setupFormValidity = () => {
         break;
     }
   };
-
   const onRoomNumberChange = () => changeRoomNumber();
 
   adTitleField.addEventListener('input', () => {
@@ -182,7 +170,6 @@ const setupFormValidity = () => {
           return word + 'ов';
       }
     };
-
     if (valueLength < MIN_TITLE_LENGTH) {
       adTitleField.setCustomValidity(`Еще ${MIN_TITLE_LENGTH - valueLength} ${defineWordEnding(MIN_TITLE_LENGTH - valueLength, 'символ')}`);
     } else if (valueLength > MAX_TITLE_LENGTH) {
@@ -192,11 +179,9 @@ const setupFormValidity = () => {
     }
     adTitleField.reportValidity();
   });
-
   changeRoomNumber();
   roomNumberField.addEventListener('change', onRoomNumberChange);
   nightPriceField.max = MAX_PRICE;
   setupAllPicturesUploaders();
-}
-
+};
 export {handleForm, changeFormStatus, setupFormValidity};
