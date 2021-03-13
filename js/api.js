@@ -6,7 +6,6 @@ const getMapData = (onSuccess, onFail) => {
     })
     .catch(() => onFail());
 };
-
 const sendFormData = (onSuccess, onFail, body) => {
   fetch('https://22.javascript.pages.academy/keksobooking',
     {
@@ -22,5 +21,4 @@ const sendFormData = (onSuccess, onFail, body) => {
     })
     .catch(() => onFail());
 };
-
 export {getMapData, sendFormData};

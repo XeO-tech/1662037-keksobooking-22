@@ -64,7 +64,7 @@ const setupMap = () => {
       addressField.value = `${newCoordinates.lat.toFixed(5)}, ${newCoordinates.lng.toFixed(5)}`
     });
   };
-  const showMapAlert = (message) => {
+  const showAlert = (message) => {
     const alertContainer = document.createElement('div');
     alertContainer.style.zIndex = 1000;
     alertContainer.style.position = 'absolute';
@@ -83,7 +83,7 @@ const setupMap = () => {
       alertContainer.remove();
     }, ALERT_SHOW_TIME);
   };
-  const onMapLoaded = () => {
+  const onLoaded = () => {
     changeFormStatus('form_fields_enabled');
     getMapData((adsArray) => {
       downloadedAds = [...adsArray];
@@ -91,7 +91,7 @@ const setupMap = () => {
       changeFormStatus('filters_enabled');
       setupFilterHandler(adsArray);
     },
-    () => showMapAlert('Не удалось загрузить объявления с сервера'),
+    () => showAlert('Не удалось загрузить объявления с сервера'),
     );
   };
   mainMarker.addTo(map);
@@ -104,7 +104,7 @@ const setupMap = () => {
   ).addTo(map);
 
   map
-    .on('load', onMapLoaded)
+    .on('load', onLoaded)
     .setView({
       lat: DEFAULT_LAT,
       lng: DEFAULT_LNG,
@@ -114,6 +114,6 @@ const setDefaultMarkerPosition = () => {
   mainMarker.setLatLng([DEFAULT_LAT, DEFAULT_LNG]);
   addressField.value = `${DEFAULT_LAT}, ${DEFAULT_LNG}`;
 };
-const resetMapMarks = () => showAds(downloadedAds);
+const resetMarks = () => showAds(downloadedAds);
 
-export {setupMap, setDefaultMarkerPosition, resetMapMarks, showAds};
+export {setupMap, setDefaultMarkerPosition, resetMarks, showAds};

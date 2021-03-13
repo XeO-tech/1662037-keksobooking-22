@@ -1,4 +1,4 @@
-import {setDefaultMarkerPosition, resetMapMarks} from './map.js';
+import {setDefaultMarkerPosition, resetMarks} from './map.js';
 import {sendFormData} from './api.js';
 import {isEscEvent} from './util.js';
 import {setupAllPicturesUploaders} from './picture-uploader.js';
@@ -43,30 +43,30 @@ const setupForm = () => {
   };
   const onPlaceTypeChanged = () => setPlaceMinPrice();
 
-  const onFormMessageEscKeydown = (evt) => {
+  const onMessageEscKeydown = (evt) => {
     if (isEscEvent) {
       evt.preventDefault();
       document.querySelector('main').lastChild.remove();
-      document.removeEventListener('click', onFormMessageClick, { once: true });
+      document.removeEventListener('click', onMessageClick, { once: true });
     }
   };
-  const onFormMessageClick = () => {
+  const onMessageClick = () => {
     document.querySelector('main').lastChild.remove();
-    document.removeEventListener('keydown', onFormMessageEscKeydown, { once: true });
+    document.removeEventListener('keydown', onMessageEscKeydown, { once: true });
   };
   const showSuccessMessage = () => {
     const successTemplate = document.querySelector('#success').content;
     const successMessage = successTemplate.querySelector('.success').cloneNode(true);
     document.querySelector('main').appendChild(successMessage);
-    document.addEventListener('keydown', onFormMessageEscKeydown, { once: true });
-    document.addEventListener('click', onFormMessageClick, { once: true });
+    document.addEventListener('keydown', onMessageEscKeydown, { once: true });
+    document.addEventListener('click', onMessageClick, { once: true });
   };
   const showErrorMessage = () => {
     const errorTemplate = document.querySelector('#error').content;
     const errorMessage = errorTemplate.querySelector('.error').cloneNode(true);
     document.querySelector('main').appendChild(errorMessage);
-    document.addEventListener('keydown', onFormMessageEscKeydown, { once: true });
-    document.addEventListener('click', onFormMessageClick, { once: true });
+    document.addEventListener('keydown', onMessageEscKeydown, { once: true });
+    document.addEventListener('click', onMessageClick, { once: true });
   };
   // Handling form fields
   setPlaceMinPrice();
@@ -90,7 +90,7 @@ const setupForm = () => {
       setDefaultMarkerPosition();
       setPlaceMinPrice();
       mapFilters.reset();
-      resetMapMarks();
+      resetMarks();
     }, FORM_RESET_DELAY);
   });
 };
