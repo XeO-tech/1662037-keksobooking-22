@@ -9,6 +9,7 @@ const DEFAULT_LAT = 35.68251;
 const DEFAULT_LNG = 139.75121;
 const DEFAULT_MAP_SCALE = 9;
 const MAX_ADS_ON_MAP = 10;
+const ALERT_SHOW_TIME = 5000;
 
 const addressField = document.querySelector('#address');
 const adsMarkersLayer = L.layerGroup();
@@ -53,8 +54,6 @@ const showAds = (adsArray) => {
   adsMarkersLayer.addTo(map);
 };
 const setupMap = () => {
-  const ALERT_SHOW_TIME = 5000;
-
   const setupAddressByMarkerOnly = () => {
     addressField.readOnly = true;
     addressField.value = `${DEFAULT_LAT}, ${DEFAULT_LNG}`;

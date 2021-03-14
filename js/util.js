@@ -1,4 +1,3 @@
-
 const getFloatFromRange = (min, max, decimal) => {
   if (min < 0 || max < 0) {
     return 'Диапазон может быть только положительный, включая ноль';

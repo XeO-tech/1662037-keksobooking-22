@@ -3,6 +3,10 @@ import {sendFormData} from './api.js';
 import {isEscEvent} from './util.js';
 import {setupAllPicturesUploaders} from './picture-uploader.js';
 
+const MIN_TITLE_LENGTH = 30;
+const MAX_TITLE_LENGTH = 100;
+const MAX_PRICE = 1000000;
+
 const adForm = document.querySelector('.ad-form');
 const nightPriceField = adForm.querySelector('#price');
 const mapFilters = document.querySelector('.map__filters');
@@ -24,21 +28,7 @@ const setupForm = () => {
     (evt.target === checkInField) ? checkOutField.value = evt.target.value : checkInField.value = evt.target.value;
   };
   const setPlaceMinPrice = () => {
-    let minPrice = 0;
-    switch (placeTypeField.value) {
-      case 'bungalow':
-        minPrice = minPrices.bungalow;
-        break;
-      case 'flat':
-        minPrice = minPrices.flat;
-        break;
-      case 'house':
-        minPrice = minPrices.house;
-        break;
-      case 'palace':
-        minPrice = minPrices.palace;
-        break;
-    }
+    let minPrice = minPrices[placeTypeField.value];
     nightPriceField.min = nightPriceField.placeholder = minPrice;
   };
   const onPlaceTypeChanged = () => setPlaceMinPrice();
@@ -123,10 +113,6 @@ const setupFormValidity = () => {
   const adTitleField = adForm.querySelector('#title');
   const roomNumberField = adForm.querySelector('#room_number');
   const guestsNumberField = adForm.querySelector('#capacity');
-
-  const MIN_TITLE_LENGTH = 30;
-  const MAX_TITLE_LENGTH = 100;
-  const MAX_PRICE = 1000000;
 
   const changeRoomNumber = () => {
     const guestsFor1RoomOption = guestsNumberField.querySelector('option[value=\'1\']');

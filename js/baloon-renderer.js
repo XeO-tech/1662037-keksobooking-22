@@ -6,7 +6,7 @@ const renderBaloon = (data) => {
   const photo = photos.querySelector('.popup__photo');
   const featuresList = card.querySelector('.popup__features');
 
-  const houseTypeAliases ={
+  const houseTypeAliases = {
     'flat': 'Квартира',
     'bungalow': 'Бунгало',
     'house': 'Дом',
