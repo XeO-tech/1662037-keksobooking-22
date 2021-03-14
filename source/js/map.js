@@ -1,4 +1,5 @@
-/* global L:readonly */
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 import {renderBaloon} from './baloon-renderer.js';
 import {changeFormStatus} from './form.js';
