@@ -1,6 +1,6 @@
 import {setDefaultMarkerPosition, resetMarks} from './map.js';
 import {sendFormData} from './api.js';
-import {isEscEvent} from './util.js';
+import {isEscEvent, defineWordEnding} from './utils.js';
 import {setupAllPicturesUploaders} from './picture-uploader.js';
 
 const MIN_TITLE_LENGTH = 30;
@@ -144,19 +144,7 @@ const setupFormValidity = () => {
 
   adTitleField.addEventListener('input', () => {
     const valueLength = adTitleField.value.length;
-
-    const defineWordEnding = (number, word) => {
-      switch (true) {
-        case (number % 10 === 1 && number !== 11):
-          return word;
-        case (number % 10 === 2 && number !== 12):
-        case (number % 10 === 3 && number !== 13):
-        case (number % 10 === 4 && number !== 14):
-          return word + 'а';
-        default:
-          return word + 'ов';
-      }
-    };
+    
     if (valueLength < MIN_TITLE_LENGTH) {
       adTitleField.setCustomValidity(`Еще ${MIN_TITLE_LENGTH - valueLength} ${defineWordEnding(MIN_TITLE_LENGTH - valueLength, 'символ')}`);
     } else if (valueLength > MAX_TITLE_LENGTH) {

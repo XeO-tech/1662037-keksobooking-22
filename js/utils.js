@@ -10,4 +10,16 @@ const getFloatFromRange = (min, max, decimal) => {
 const isEscEvent = (evt) => {
   return evt.key === ('Escape' || 'Esc');
 };
-export {getFloatFromRange, isEscEvent};
+const defineWordEnding = (number, word) => {
+  switch (true) {
+    case (number % 10 === 1 && number !== 11):
+      return word;
+    case (number % 10 === 2 && number !== 12):
+    case (number % 10 === 3 && number !== 13):
+    case (number % 10 === 4 && number !== 14):
+      return word + 'а';
+    default:
+      return word + 'ов';
+  }
+};
+export {getFloatFromRange, isEscEvent, defineWordEnding};
