@@ -1,4 +1,4 @@
-/* global _:readonly */
+import {debounce} from 'lodash-es';
 import {showAds} from './map.js';
 
 const RERENDER_DELAY = 500;
@@ -96,6 +96,6 @@ const setupFilterHandler = (adsArray) => {
     showAds(currentAdsOnMap);
   };
   Object.keys(filtersProperties)
-    .forEach((filter) => filtersProperties[filter].filterField.addEventListener('change', _.debounce(onFilterChange, RERENDER_DELAY)));
+    .forEach((filter) => filtersProperties[filter].filterField.addEventListener('change', debounce(onFilterChange, RERENDER_DELAY)));
 };
 export {setupFilterHandler};
