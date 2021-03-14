@@ -16,7 +16,6 @@
     "eslint": "7.18.0",
     "eslint-config-htmlacademy": "2.0.0",
     "file-loader": "6.2.0",
-    "lodash-es": "4.17.21",
     "style-loader": "2.0.0",
     "webpack": "5.25.0",
     "webpack-cli": "4.5.0"

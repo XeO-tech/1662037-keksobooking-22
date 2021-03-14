@@ -1,3 +1,5 @@
+let lastCall;
+
 const getFloatFromRange = (min, max, decimal) => {
   if (min < 0 || max < 0) {
     return 'Диапазон может быть только положительный, включая ноль';
@@ -22,4 +24,12 @@ const defineWordEnding = (number, word) => {
       return word + 'ов';
   }
 };
-export {getFloatFromRange, isEscEvent, defineWordEnding};
+const debounce = (func, delay) => {
+  lastCall = Date.now();
+  setTimeout(() => {
+    if ((Date.now() - lastCall) >= delay) {
+      return func();
+    }
+  }, delay);
+};
+export {getFloatFromRange, isEscEvent, defineWordEnding, debounce};
