@@ -6,29 +6,28 @@ import {setupAllPicturesUploaders} from './picture-uploader.js';
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE = 1000000;
+const FORM_RESET_DELAY = 100;
+const MIN_PRICES = {
+  bungalow: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000,
+};
 
 const adForm = document.querySelector('.ad-form');
 const nightPriceField = adForm.querySelector('#price');
-const mapFilters = document.querySelector('.map__filters');
+const mapFiltersForm = document.querySelector('.map__filters');
 
 const setupForm = () => {
   const placeTypeField = adForm.querySelector('#type');
   const checkInField = adForm.querySelector('#timein');
   const checkOutField = adForm.querySelector('#timeout');
 
-  const minPrices = {
-    bungalow: 0,
-    flat: 1000,
-    house: 5000,
-    palace: 10000,
-  };
-  const FORM_RESET_DELAY = 100;
-
   const onCheckInOut = (evt) => {
     (evt.target === checkInField) ? checkOutField.value = evt.target.value : checkInField.value = evt.target.value;
   };
   const setPlaceMinPrice = () => {
-    let minPrice = minPrices[placeTypeField.value];
+    let minPrice = MIN_PRICES[placeTypeField.value];
     nightPriceField.min = nightPriceField.placeholder = minPrice;
   };
   const onPlaceTypeChanged = () => setPlaceMinPrice();
@@ -79,31 +78,31 @@ const setupForm = () => {
     setTimeout(() => {
       setDefaultMarkerPosition();
       setPlaceMinPrice();
-      mapFilters.reset();
+      mapFiltersForm.reset();
       resetMarks();
     }, FORM_RESET_DELAY);
   });
 };
 const changeFormStatus = (status) => {
-  const adFormElements = adForm.querySelectorAll('.ad-form__element');
-  const mapFiltersElements = mapFilters.children;
+  const adFormNodes = adForm.querySelectorAll('.ad-form__element');
+  const mapFiltersNodes = mapFiltersForm.children;
 
   switch (status) {
     case 'disabled':
       adForm.classList.add('ad-form--disabled');
-      adFormElements.forEach((element) => element.disabled = true);
-      mapFilters.classList.add('map__filters--disabled');
-      for (let element of mapFiltersElements) {
+      adFormNodes.forEach((element) => element.disabled = true);
+      mapFiltersForm.classList.add('map__filters--disabled');
+      for (let element of mapFiltersNodes) {
         element.disabled = true;
       }
       break;
     case 'form_fields_enabled':
       adForm.classList.remove('ad-form--disabled');
-      adFormElements.forEach((element) => element.disabled = false);
+      adFormNodes.forEach((element) => element.disabled = false);
       break;
     case 'filters_enabled':
-      mapFilters.classList.remove('map__filters--disabled');
-      for (let element of mapFiltersElements) {
+      mapFiltersForm.classList.remove('map__filters--disabled');
+      for (let element of mapFiltersNodes) {
         element.disabled = false;
       }
       break;
@@ -116,6 +115,8 @@ const setupFormValidity = () => {
 
   const changeRoomNumber = () => {
     const guestsFor1RoomOption = guestsNumberField.querySelector('option[value=\'1\']');
+    const guestsFor2RoomsOption = guestsNumberField.querySelector('option[value=\'2\']');
+    const guestsFor3RoomsOption = guestsNumberField.querySelector('option[value=\'3\']');
     const guestsFor100RoomsOption = guestsNumberField.querySelector('option[value=\'0\']');
 
     for (let element of guestsNumberField.children) {
@@ -124,10 +125,10 @@ const setupFormValidity = () => {
     }
     switch (roomNumberField.value) {
       case '3':
-        guestsNumberField.querySelector('option[value=\'3\']').disabled = false;
+        guestsFor3RoomsOption.disabled = false;
         // falls through
       case '2':
-        guestsNumberField.querySelector('option[value=\'2\']').disabled = false;
+        guestsFor2RoomsOption.disabled = false;
         // falls through
       case '1':
         guestsFor1RoomOption.disabled = false;

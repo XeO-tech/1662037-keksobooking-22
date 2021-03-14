@@ -6,21 +6,17 @@ const scalePicture = (picture) => {
   const originalHeight = picture.height;
   let newWidth, newHeight;
 
-  if (picture.width === picture.height) {
-    picture.width = picture.height = MAX_PREVIEW_PIC_SIZE;
+  if (originalWidth  === originalHeight) {
+    newWidth = newHeight = MAX_PREVIEW_PIC_SIZE;
+  } else if (originalWidth > originalHeight){
+    newWidth = MAX_PREVIEW_PIC_SIZE;
+    newHeight = Math.round((MAX_PREVIEW_PIC_SIZE / originalWidth) * originalHeight);
   } else {
-    switch (true) {
-      case (originalWidth > originalHeight):
-        newWidth = MAX_PREVIEW_PIC_SIZE;
-        newHeight = Math.round((MAX_PREVIEW_PIC_SIZE / originalWidth) * originalHeight);
-        break;
-      default:
-        newHeight = MAX_PREVIEW_PIC_SIZE;
-        newWidth = Math.round((MAX_PREVIEW_PIC_SIZE / originalHeight) * originalWidth);
-    }
-    picture.width = newWidth;
-    picture.height = newHeight;
+    newHeight = MAX_PREVIEW_PIC_SIZE;
+    newWidth = Math.round((MAX_PREVIEW_PIC_SIZE / originalHeight) * originalWidth);
   }
+  picture.width = newWidth;
+  picture.height = newHeight;
 };
 const setupAllPicturesUploaders = () => {
   const avatarContainer = document.querySelector('.ad-form-header__preview');

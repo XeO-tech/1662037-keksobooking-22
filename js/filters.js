@@ -89,15 +89,13 @@ const filtersProperties = {
   },
 };
 const setupFilterHandler = (adsArray) => {
-
   const onFilterChange = () => {
     let currentAdsOnMap = [...adsArray];
     Object.keys(filtersProperties)
       .forEach((filter) => currentAdsOnMap = filtersProperties[filter].filterFunction(currentAdsOnMap, filter, filtersProperties[filter].filterField));
     showAds(currentAdsOnMap);
   };
-  for (let filterName in filtersProperties) {
-    filtersProperties[filterName].filterField.addEventListener('change', _.debounce(onFilterChange, RERENDER_DELAY));
-  }
+  Object.keys(filtersProperties)
+    .forEach((filter) => filtersProperties[filter].filterField.addEventListener('change', _.debounce(onFilterChange, RERENDER_DELAY)));
 };
 export {setupFilterHandler};
