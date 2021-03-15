@@ -96,6 +96,6 @@ const setupFilterHandler = (adsArray) => {
     showAds(currentAdsOnMap);
   };
   Object.keys(filtersProperties)
-    .forEach((filter) => filtersProperties[filter].filterField.addEventListener('change', () => debounce(onFilterChange, RERENDER_DELAY)));
+    .forEach((filter) => filtersProperties[filter].filterField.addEventListener('change', debounce(onFilterChange, RERENDER_DELAY)));
 };
 export {setupFilterHandler};

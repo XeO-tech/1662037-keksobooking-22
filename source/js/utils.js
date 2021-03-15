@@ -1,4 +1,3 @@
-let lastCall;
 
 const isEscEvent = (evt) => {
   return evt.key === ('Escape' || 'Esc');
@@ -16,11 +15,14 @@ const defineWordEnding = (number, word) => {
   }
 };
 const debounce = (func, delay) => {
-  lastCall = Date.now();
-  setTimeout(() => {
-    if ((Date.now() - lastCall) >= delay) {
-      return func();
-    }
-  }, delay);
+  let lastCall;
+  return function() {
+    lastCall = Date.now();
+    setTimeout(() => {
+      if ((Date.now() - lastCall) >= delay) {
+        return func();
+      }
+    }, delay);
+  }
 };
 export {isEscEvent, defineWordEnding, debounce};
