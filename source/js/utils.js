@@ -16,7 +16,7 @@ const defineWordEnding = (number, word) => {
 };
 const debounce = (func, delay) => {
   let lastCall;
-  return function() {
+  return () => {
     lastCall = Date.now();
     setTimeout(() => {
       if ((Date.now() - lastCall) >= delay) {
