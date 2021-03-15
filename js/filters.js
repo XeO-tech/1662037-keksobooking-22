@@ -25,7 +25,6 @@ const filterSimpleTextField = (array, filterName, filterField) => {
     return element.offer[filterName].toString() === filterField.value
   })
 };
-
 const filterPriceField = (array, filterName, filterField) => {
   if (filterField.value === 'any') {
     return array;
@@ -41,14 +40,12 @@ const filterPriceField = (array, filterName, filterField) => {
     }
   })
 };
-
 const filterFeatures = (array, filterName, filterField) => {
   if (!filterField.checked) {
     return array;
   }
   return array.filter((element) => element.offer.features.includes(filterName))
 };
-
 const filtersProperties = {
   type: {
     filterField: typeFilter,
@@ -91,18 +88,14 @@ const filtersProperties = {
     filterFunction: filterFeatures,
   },
 };
-
 const setupFilterHandler = (adsArray) => {
-
   const onFilterChange = () => {
     let currentAdsOnMap = [...adsArray];
     Object.keys(filtersProperties)
       .forEach((filter) => currentAdsOnMap = filtersProperties[filter].filterFunction(currentAdsOnMap, filter, filtersProperties[filter].filterField));
     showAds(currentAdsOnMap);
   };
-  for (let filterName in filtersProperties) {
-    filtersProperties[filterName].filterField.addEventListener('change', _.debounce(onFilterChange, RERENDER_DELAY));
-  }
+  Object.keys(filtersProperties)
+    .forEach((filter) => filtersProperties[filter].filterField.addEventListener('change', _.debounce(onFilterChange, RERENDER_DELAY)));
 };
-
 export {setupFilterHandler};
