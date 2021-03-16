@@ -7,7 +7,7 @@ const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE = 1000000;
 const FORM_RESET_DELAY = 100;
-const MIN_PRICES = {
+const MinPrices = {
   bungalow: 0,
   flat: 1000,
   house: 5000,
@@ -27,7 +27,7 @@ const setupForm = () => {
     (evt.target === checkInField) ? checkOutField.value = evt.target.value : checkInField.value = evt.target.value;
   };
   const setPlaceMinPrice = () => {
-    let minPrice = MIN_PRICES[placeTypeField.value];
+    let minPrice = MinPrices[placeTypeField.value];
     nightPriceField.min = nightPriceField.placeholder = minPrice;
   };
   const onPlaceTypeChanged = () => setPlaceMinPrice();
@@ -144,7 +144,7 @@ const setupFormValidity = () => {
 
   adTitleField.addEventListener('input', () => {
     const valueLength = adTitleField.value.length;
-    
+
     if (valueLength < MIN_TITLE_LENGTH) {
       adTitleField.setCustomValidity(`Еще ${MIN_TITLE_LENGTH - valueLength} ${defineWordEnding(MIN_TITLE_LENGTH - valueLength, 'символ')}`);
     } else if (valueLength > MAX_TITLE_LENGTH) {

@@ -1,4 +1,4 @@
-const HOUSE_TYPE_ALIASES = {
+const HouseTypeAliases = {
   'flat': 'Квартира',
   'bungalow': 'Бунгало',
   'house': 'Дом',
@@ -15,7 +15,7 @@ const renderBalloon = (data) => {
   const textDataAliases = {
     'popup__text--address': data.offer.address,
     'popup__title': data.offer.title,
-    'popup__type': HOUSE_TYPE_ALIASES[data.offer.type],
+    'popup__type': HouseTypeAliases[data.offer.type],
     'popup__description': data.offer.description,
     'popup__text--price': (data.offer.price !== '') ? data.offer.price + ' ₽/ночь' : '',
     'popup__text--time': (data.offer.checkin !== '' && data.offer.checkout !== '') ? `Заезд после ${data.offer.checkin}, выезд до ${data.offer.checkout}.` : '',
