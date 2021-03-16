@@ -1,6 +1,10 @@
 const FILE_TYPES = ['.jpg', '.jpeg', '.png'];
 const MAX_PREVIEW_PIC_SIZE = 70;
 
+const avatarContainerNode = document.querySelector('.ad-form-header__preview');
+const housePictureContainerNode = document.querySelector('.ad-form__photo');
+let defaultAvatarNode = avatarContainerNode.querySelector('img');
+
 const scalePicture = (picture) => {
   const originalWidth = picture.width;
   const originalHeight = picture.height;
@@ -19,10 +23,8 @@ const scalePicture = (picture) => {
   picture.height = newHeight;
 };
 const setupAllPicturesUploaders = () => {
-  const avatarContainer = document.querySelector('.ad-form-header__preview');
-  const avatarChooser = document.querySelector('.ad-form-header__input');
-  const housePictureContainer = document.querySelector('.ad-form__photo');
-  const housePictureChooser = document.querySelector('.ad-form__input');
+  const avatarInputField = document.querySelector('.ad-form-header__input');
+  const housePictureInputField = document.querySelector('.ad-form__input');
 
   const setupUploader = (pictureChooser, pictureContainer, pictureAltText) => {
     const onChange = () => {
@@ -35,7 +37,6 @@ const setupAllPicturesUploaders = () => {
         const reader = new FileReader();
         reader.addEventListener('load', () => {
           const picturePreview = document.createElement('img');
-
           picturePreview.alt = pictureAltText;
           picturePreview.src = reader.result;
           picturePreview.addEventListener('load', () => scalePicture(picturePreview));
@@ -52,7 +53,14 @@ const setupAllPicturesUploaders = () => {
     };
     pictureChooser.addEventListener('change', onChange);
   };
-  setupUploader(avatarChooser, avatarContainer, 'Аватар пользователя');
-  setupUploader(housePictureChooser, housePictureContainer, 'Фото жилья');
+  setupUploader(housePictureInputField, housePictureContainerNode, 'Фото жилья');
+  setupUploader(avatarInputField, avatarContainerNode, 'Аватар пользователя');
 };
-export {setupAllPicturesUploaders};
+const clearAllPicturesPreview = () => {
+  avatarContainerNode.innerHTML = '';
+  avatarContainerNode.appendChild(defaultAvatarNode);
+  avatarContainerNode.removeAttribute('style');
+  housePictureContainerNode.innerHTML = '';
+  housePictureContainerNode.removeAttribute('style');
+};
+export {setupAllPicturesUploaders, clearAllPicturesPreview};

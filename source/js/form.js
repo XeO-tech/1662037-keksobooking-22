@@ -1,12 +1,11 @@
 import {setDefaultMarkerPosition, resetMarks} from './map.js';
 import {sendFormData} from './api.js';
 import {isEscEvent, defineWordEnding} from './utils.js';
-import {setupAllPicturesUploaders} from './picture-uploader.js';
+import {setupAllPicturesUploaders, clearAllPicturesPreview } from './picture-uploader.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE = 1000000;
-const FORM_RESET_DELAY = 100;
 const MinPrices = {
   bungalow: 0,
   flat: 1000,
@@ -22,6 +21,7 @@ const setupForm = () => {
   const placeTypeField = adForm.querySelector('#type');
   const checkInField = adForm.querySelector('#timein');
   const checkOutField = adForm.querySelector('#timeout');
+  const resetFormButton = adForm.querySelector('.ad-form__reset');
 
   const onCheckInOut = (evt) => {
     (evt.target === checkInField) ? checkOutField.value = evt.target.value : checkInField.value = evt.target.value;
@@ -61,26 +61,30 @@ const setupForm = () => {
   setPlaceMinPrice();
   [checkInField, checkOutField].forEach((element) => element.addEventListener('change', onCheckInOut));
   placeTypeField.addEventListener('change', onPlaceTypeChanged);
+  // Handling reset
+  const resetAdForm = () => {
+    adForm.reset();
+    clearAllPicturesPreview();
+    setDefaultMarkerPosition();
+    setPlaceMinPrice();
+    mapFiltersForm.reset();
+    resetMarks();
+  };
+  resetFormButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    resetAdForm();
+  });
   // Handling submitting
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     sendFormData(
       () => {
         showSuccessMessage();
-        adForm.reset();
+        resetAdForm();
       },
       showErrorMessage,
       new FormData(evt.target),
     );
-  });
-  // Handling reset
-  adForm.addEventListener('reset', () => {
-    setTimeout(() => {
-      setDefaultMarkerPosition();
-      setPlaceMinPrice();
-      mapFiltersForm.reset();
-      resetMarks();
-    }, FORM_RESET_DELAY);
   });
 };
 const changeFormStatus = (status) => {

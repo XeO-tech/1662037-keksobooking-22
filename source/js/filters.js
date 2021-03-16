@@ -9,13 +9,13 @@ const typeFilter = document.querySelector('#housing-type');
 const roomsFilter = document.querySelector('#housing-rooms');
 const priceFilter = document.querySelector('#housing-price');
 const guestFilter = document.querySelector('#housing-guests');
-const featuresList = document.querySelector('#housing-features');
-const wifiFilter = featuresList.querySelector('input[value=wifi]');
-const dishwasherFilter = featuresList.querySelector('input[value=dishwasher]');
-const parkingFilter = featuresList.querySelector('input[value=parking]');
-const washerFilter = featuresList.querySelector('input[value=washer]');
-const elevatorFilter = featuresList.querySelector('input[value=elevator]');
-const conditionerFilter = featuresList.querySelector('input[value=conditioner]');
+const featuresListNode = document.querySelector('#housing-features');
+const wifiFilter = featuresListNode.querySelector('input[value=wifi]');
+const dishwasherFilter = featuresListNode.querySelector('input[value=dishwasher]');
+const parkingFilter = featuresListNode.querySelector('input[value=parking]');
+const washerFilter = featuresListNode.querySelector('input[value=washer]');
+const elevatorFilter = featuresListNode.querySelector('input[value=elevator]');
+const conditionerFilter = featuresListNode.querySelector('input[value=conditioner]');
 
 const filterSimpleTextField = (array, filterName, filterField) => {
   if (filterField.value === 'any') {
