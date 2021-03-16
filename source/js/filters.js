@@ -1,5 +1,5 @@
-/* global _:readonly */
 import {showAds} from './map.js';
+import {debounce} from './utils.js';
 
 const RERENDER_DELAY = 500;
 const HIGH_PRICE_VALUE = 50000;
@@ -96,6 +96,6 @@ const setupFilterHandler = (adsArray) => {
     showAds(currentAdsOnMap);
   };
   Object.keys(filtersProperties)
-    .forEach((filter) => filtersProperties[filter].filterField.addEventListener('change', _.debounce(onFilterChange, RERENDER_DELAY)));
+    .forEach((filter) => filtersProperties[filter].filterField.addEventListener('change', debounce(onFilterChange, RERENDER_DELAY)));
 };
 export {setupFilterHandler};

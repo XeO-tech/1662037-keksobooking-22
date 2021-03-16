@@ -1,6 +1,7 @@
-/* global L:readonly */
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
-import {renderBaloon} from './baloon-renderer.js';
+import {renderBalloon} from './balloon-renderer.js';
 import {changeFormStatus} from './form.js';
 import {getMapData} from './api.js';
 import {setupFilterHandler} from './filters.js';
@@ -49,7 +50,7 @@ const showAds = (adsArray) => {
       icon: adsIcon,
     })
       .addTo(adsMarkersLayer)
-      .bindPopup(renderBaloon(element));
+      .bindPopup(renderBalloon(element));
   });
   adsMarkersLayer.addTo(map);
 };

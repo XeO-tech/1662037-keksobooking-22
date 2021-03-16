@@ -1,16 +1,17 @@
-const renderBaloon = (data) => {
+const HOUSE_TYPE_ALIASES = {
+  'flat': 'Квартира',
+  'bungalow': 'Бунгало',
+  'house': 'Дом',
+  'palace': 'Дворец',
+};
+
+const renderBalloon = (data) => {
   const cardTemplate = document.querySelector('#card').content;
   const cardNode = cardTemplate.querySelector('.popup').cloneNode(true);
   const photosContainer = cardNode.querySelector('.popup__photos');
   const photoNode = photosContainer.querySelector('.popup__photo');
   const featuresList = cardNode.querySelector('.popup__features');
 
-  const HOUSE_TYPE_ALIASES = {
-    'flat': 'Квартира',
-    'bungalow': 'Бунгало',
-    'house': 'Дом',
-    'palace': 'Дворец',
-  };
   const textDataAliases = {
     'popup__text--address': data.offer.address,
     'popup__title': data.offer.title,
@@ -57,5 +58,5 @@ const renderBaloon = (data) => {
 
   return cardNode;
 };
-export {renderBaloon};
+export {renderBalloon};
 
