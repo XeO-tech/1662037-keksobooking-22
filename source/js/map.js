@@ -65,22 +65,22 @@ const setupMap = () => {
     });
   };
   const showAlert = (message) => {
-    const alertContainer = document.createElement('div');
-    alertContainer.style.zIndex = 1000;
-    alertContainer.style.position = 'absolute';
-    alertContainer.style.left = 0;
-    alertContainer.style.right = 0;
-    alertContainer.style.top = 0;
-    alertContainer.style.padding = '2px';
-    alertContainer.style.fontSize = '15px';
-    alertContainer.style.textAlign = 'center';
-    alertContainer.style.backgroundColor = 'red';
-    alertContainer.style.opacity = 0.8;
-    alertContainer.textContent = message;
+    const alertContainerNode = document.createElement('div');
+    alertContainerNode.style.zIndex = 1000;
+    alertContainerNode.style.position = 'absolute';
+    alertContainerNode.style.left = 0;
+    alertContainerNode.style.right = 0;
+    alertContainerNode.style.top = 0;
+    alertContainerNode.style.padding = '2px';
+    alertContainerNode.style.fontSize = '15px';
+    alertContainerNode.style.textAlign = 'center';
+    alertContainerNode.style.backgroundColor = 'red';
+    alertContainerNode.style.opacity = 0.8;
+    alertContainerNode.textContent = message;
 
-    document.querySelector('#map-canvas').append(alertContainer);
+    document.querySelector('#map-canvas').append(alertContainerNode);
     setTimeout(() => {
-      alertContainer.remove();
+      alertContainerNode.remove();
     }, ALERT_SHOW_TIME);
   };
   const onLoaded = () => {

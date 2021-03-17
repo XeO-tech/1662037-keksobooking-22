@@ -1,4 +1,4 @@
-const HOUSE_TYPE_ALIASES = {
+const HouseTypeAliases = {
   'flat': 'Квартира',
   'bungalow': 'Бунгало',
   'house': 'Дом',
@@ -8,14 +8,14 @@ const HOUSE_TYPE_ALIASES = {
 const renderBalloon = (data) => {
   const cardTemplate = document.querySelector('#card').content;
   const cardNode = cardTemplate.querySelector('.popup').cloneNode(true);
-  const photosContainer = cardNode.querySelector('.popup__photos');
-  const photoNode = photosContainer.querySelector('.popup__photo');
-  const featuresList = cardNode.querySelector('.popup__features');
+  const photosContainerNode = cardNode.querySelector('.popup__photos');
+  const photoNode = photosContainerNode.querySelector('.popup__photo');
+  const featuresListNode = cardNode.querySelector('.popup__features');
 
   const textDataAliases = {
     'popup__text--address': data.offer.address,
     'popup__title': data.offer.title,
-    'popup__type': HOUSE_TYPE_ALIASES[data.offer.type],
+    'popup__type': HouseTypeAliases[data.offer.type],
     'popup__description': data.offer.description,
     'popup__text--price': (data.offer.price !== '') ? data.offer.price + ' ₽/ночь' : '',
     'popup__text--time': (data.offer.checkin !== '' && data.offer.checkout !== '') ? `Заезд после ${data.offer.checkin}, выезд до ${data.offer.checkout}.` : '',
@@ -36,22 +36,22 @@ const renderBalloon = (data) => {
     newPhoto.src = data.offer.photos[i];
     photosFragment.appendChild(newPhoto);
   }
-  photosContainer.removeChild(photoNode);
-  photosContainer.appendChild(photosFragment);
-  if (photosContainer.children.length === 0) {
-    photosContainer.style.display = 'none';
+  photosContainerNode.removeChild(photoNode);
+  photosContainerNode.appendChild(photosFragment);
+  if (photosContainerNode.children.length === 0) {
+    photosContainerNode.style.display = 'none';
   }
   // Displaying features icons
-  featuresList.innerHTML = '';
+  featuresListNode.innerHTML = '';
   const featuresFragment = document.createDocumentFragment();
   for (let element of data.offer.features) {
     const newFeature = document.createElement('li');
     newFeature.className = `popup__feature popup__feature--${element}`;
     featuresFragment.appendChild(newFeature);
   }
-  featuresList.appendChild(featuresFragment);
-  if (featuresList.children.length === 0) {
-    featuresList.style.display = 'none';
+  featuresListNode.appendChild(featuresFragment);
+  if (featuresListNode.children.length === 0) {
+    featuresListNode.style.display = 'none';
   }
   // Displaying avatar
   cardNode.querySelector('.popup__avatar').src = data.author.avatar;
